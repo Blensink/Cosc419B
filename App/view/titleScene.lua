@@ -13,10 +13,12 @@ local titleGroup
 local storyButtonGroup
 local tutorialButtonGroup
 local creditsButtonGroup
+local customButtonGroup
 
 local storyButton
 local tutorialButton
 local creditsButton
+local customButton
 
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -73,11 +75,20 @@ function scene:create( event )
 	creditsButtonGroup = display.newGroup()
 	creditsButtonGroup:insert( creditsButton )
 
+	customButton = display.newImageRect( "img/credits.png", 100, 50 )
+	customButton:setFillColor( unpack( settings.getButtonOffColor() ) )
+	customButton.x = display.contentCenterX*3/2
+	customButton.y = display.contentCenterY + 200
+
+	customButtonGroup = display.newGroup()
+	customButtonGroup:insert( customButton )
+
 	sceneGroup:insert( background )
 	sceneGroup:insert( titleGroup )
 	sceneGroup:insert( storyButtonGroup )
 	sceneGroup:insert( tutorialButtonGroup )
 	sceneGroup:insert( creditsButtonGroup )
+	sceneGroup:insert( customButtonGroup )
 end
 
 --- Called twice, once BEFORE, and once immediately after scene has moved onscreen.
@@ -140,9 +151,21 @@ function scene:show( event )
 			end
 		end
 
+		function customPressed( event )
+			local phase = event.phase
+
+			if phase == "began" then
+				customButton:setFillColor( unpack( settings.getButtonOnColor() ) )
+			elseif phase == "ended" then
+				customButton:setFillColor( unpack( settings.getButtonOffColor() ) )
+				composer.gotoScene( "view.customGameScene" )
+			end
+		end
+
 		storyButtonGroup:addEventListener( "touch", storyPressed )
 		tutorialButtonGroup:addEventListener( "touch", tutorialPressed ) 
 		creditsButtonGroup:addEventListener( "touch", creditsPressed ) 
+		customButtonGroup:addEventListener( "touch", customPressed )
 
 		-- Last things last begin the music TODO: RESUME MUSIC
 	--	local backgroundMusic = audio.loadStream( "sound/elevatormusic1.wav")
@@ -168,6 +191,7 @@ function scene:hide( event )
 		storyButtonGroup:removeEventListener( "touch", storyPressed )
 		tutorialButtonGroup:removeEventListener( "touch", tutorialPressed ) 
 		creditsButtonGroup:removeEventListener( "touch", creditsPressed ) 
+		customButtonGroup:removeEventListener( "touch", customPressed )
 
 		audio.stop()
 		-----------------------------------------------------------------------------
