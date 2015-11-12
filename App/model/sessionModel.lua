@@ -1,6 +1,7 @@
 sessionModel = {}
 
 local json = require( "json" )
+local network = require( "model.networkModel" )
 
 local userInfo = {}
 local seenDisclaimer = false
@@ -191,6 +192,61 @@ end
 
 function sessionModel:tutorialComplete()
 	return userInfo["tutorialComplete"]
+end
+
+-------------------------------------------------------------------------
+--
+-- Custom game stuff.
+--
+-------------------------------------------------------------------------
+
+function sessionModel:getIconPack()
+	print( "[SessionModel] Getting Icon Pack" )
+
+	local path = system.pathForFile( "icons.txt", system.ResourceDirectory )
+
+	-- Open the file handle
+	local file, errorString = io.open( path, "r" )
+
+	if not file then
+	    -- Error occurred; output the cause
+	    print( "File error: " .. errorString )
+	else
+	    -- Read data from file
+	    local contents = file:read( "*a" )
+	    local iconPack = json.decode( contents )
+
+	    -- Close the file handle
+	    io.close( file )
+
+		return iconPack
+	end
+
+	file = nil
+end
+
+function sessionModel:writeLevel( puzzleTable )
+	print( "[SessionModel] Writing out custom level" )	
+
+	-- Path for the file to write
+	local path = system.pathForFile( tostring(math.random( 0, 10000000 )) .. ".txt", system.DocumentsDirectory )
+
+	-- Open the file handle
+	local file, errorString = io.open( path, "w" )
+
+	if not file then
+	    -- Error occurred; output the cause
+	    print( "File error: " .. errorString )
+	else
+	    -- Write data to file
+	    print( json.encode(puzzleTable))
+	    file:write( json.encode( puzzleTable ) )
+
+	    -- Close the file handle
+	    io.close( file )
+	end
+
+	file = nil
 end
 
 return sessionModel

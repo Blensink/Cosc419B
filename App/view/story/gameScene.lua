@@ -145,11 +145,6 @@ function scene:show( event )
 	--------------------------------------------------
 	elseif ( phase == "did" ) then
 
-		-----------------------------------------------------------------------------
-		-- Called when the scene is now on screen.
-		-- Insert code here to make the scene come alive.
-		-- Example: start timers, begin animation, play audio, etc.
-		-----------------------------------------------------------------------------
 		function objectTouched( event )
 			local phase = event.phase
 			local target = event.target

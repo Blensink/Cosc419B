@@ -47,6 +47,7 @@ function scene:create( event )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
 	background.alpha = 0.25
+	sceneGroup:insert( background )
 
 	backButton = display.newImageRect( "img/back.png", 100, 50 )
 	backButton:setFillColor( unpack( settings.getButtonOffColor() ) )
@@ -55,6 +56,7 @@ function scene:create( event )
 
 	backButtonGroup = display.newGroup()
 	backButtonGroup:insert( backButton )
+	sceneGroup:insert( backButtonGroup )
 
 	createButton = display.newImageRect( "img/back.png", 100, 50 )
 	createButton:setFillColor( unpack( settings.getButtonOffColor() ) )
@@ -63,6 +65,7 @@ function scene:create( event )
 
 	createButtonGroup = display.newGroup()
 	createButtonGroup:insert( createButton )
+	sceneGroup:insert( createButtonGroup )
 
 	playButton = display.newImageRect( "img/back.png", 100, 50 )
 	playButton:setFillColor( unpack( settings.getButtonOffColor() ) )
@@ -71,10 +74,6 @@ function scene:create( event )
 
 	playButtonGroup = display.newGroup()
 	playButtonGroup:insert( playButton )
-
-	sceneGroup:insert( background )
-	sceneGroup:insert( backButtonGroup )
-	sceneGroup:insert( createButtonGroup )
 	sceneGroup:insert( playButtonGroup )
 end
 
