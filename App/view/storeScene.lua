@@ -43,6 +43,7 @@ function scene:create( event )
 	sceneGroup:insert( background )
 
 	-- Get the current number of points.
+	print( "[Store Scene] Getting user info ")
 	session.getInfo()
 	local currentPoints = session.getPoints()
 

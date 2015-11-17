@@ -11,6 +11,7 @@ local seenDisclaimer = false
 function sessionModel:saveInfo()
 	--userInfo["seenDisclaimer"] = seenDisclaimer
 	local output = json.encode( userInfo )
+	print( "UserInfo:", userInfo["points"])
 
 	-- Path for the file to write
 	local path = system.pathForFile( "userInfo.txt", system.DocumentsDirectory )
@@ -48,10 +49,10 @@ function sessionModel:getInfo()
 	    local contents = file:read( "*a" )
 
 	    -- Output the file contents
-	    print( "User info contents: ")
+	    print( " \t User info contents: ")
 	    userInfo = json.decode( contents )
 	    for k,v in pairs(userInfo) do
-	    	print("\t",k,v)
+	    	print("\t\t",k,v)
 	    end
 	    print("\n")
 	    	    -- Close the file handle
@@ -315,13 +316,14 @@ end
 
 function sessionModel:subtractPoints( amount )
 	local points = tonumber( userInfo["points"] )
-	print("Current points:", points)
+
 	if points == nil then
 		return false
 	elseif points < amount then
 		return false
 	else
 		userInfo["points"] = userInfo["points"] - amount
+
 		return true
 	end
 end
@@ -333,9 +335,9 @@ end
 --------------------------------------------------------------------------------
 
 function sessionModel:checkIfBought( itemName )
-	if userInfo[itemName] == nil or userInfo[itemName] == "false" then
+	if userInfo[itemName] == nil or userInfo[itemName] == false then
 		return false
-	elseif userInfo[itemName] == "true" then
+	elseif userInfo[itemName] == true then
 		return true
 	else
 		return false
@@ -347,7 +349,6 @@ function sessionModel:setItemBought( itemName )
 end
 
 function sessionModel:setActiveItem( type, name )
-	print( type, name )
 	userInfo[type] = name
 end
 

@@ -20,8 +20,12 @@ end
 --------------------------------------------------------------------------------
 
 function settingsModel:setItemBought( itemName )
-	sessionModel:getInfo()
 	sessionModel:setItemBought( itemName )
+	sessionModel:saveInfo()
+end
+
+function settingsModel:setActiveItem( type, name )
+	sessionModel:setActiveItem( type, name )
 	sessionModel:saveInfo()
 end
 

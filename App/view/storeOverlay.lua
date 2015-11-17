@@ -9,7 +9,7 @@ local session = require( "model.sessionModel" )
 local settings = require( "model.settingsModel" )
 
 local backButton
-local buyButton
+local buyButton = nil
 local equipButton = nil
 
 local textGroup = display.newGroup()
@@ -99,11 +99,14 @@ function scene:create( event )
 	sceneGroup:insert( backButton )
 
 	-- If they've already bought an item, show the equip option, otherwise show the buy button.
-	if session.checkIfBought( item.name ) and ( item.type == "musicPack" or item.type == "theme" ) then
-		equipButton = display.newImageRect( "img/home.png", 75, 50 )
-		equipButton.x = backgroundRect.x + backgroundRect.width/2 - equipButton.width/2 - 5
-		equipButton.y = backgroundRect.y + backgroundRect.height/2 - equipButton.height/2 - 5
-		textGroup:insert( equipButton )
+	if session:checkIfBought( item.name ) then
+		-- This is two statements to capture non-equippable bought items.
+		if item.type == "musicPack" or item.type == "theme" then
+			equipButton = display.newImageRect( "img/home.png", 75, 50 )
+			equipButton.x = backgroundRect.x + backgroundRect.width/2 - equipButton.width/2 - 5
+			equipButton.y = backgroundRect.y + backgroundRect.height/2 - equipButton.height/2 - 5
+			textGroup:insert( equipButton )
+		end
 	else
 		buyButton = display.newImageRect( "img/back.png", 75, 50 )
 		buyButton.x = backgroundRect.x + backgroundRect.width/2 - buyButton.width/2 - 5
@@ -133,7 +136,6 @@ function scene:show( event )
 				backButton:setFillColor( unpack( settings.getButtonOnColor() ) )
 			elseif phase == "ended" then
 				backButton:setFillColor( unpack( settings.getButtonOffColor() ) )
-				print( "hiding overlay")
 				composer.hideOverlay()
 			end
 		end
@@ -148,18 +150,15 @@ function scene:show( event )
 			elseif phase == "ended" then
 				backButton:setFillColor( unpack( settings.getButtonOffColor() ) )
 
-				session.getInfo()
-
 				local currentPoints = session.getPoints()
 				local cost = item.cost
-				print( "[Store Overlay]: Current points:" .. currentPoints )
 
 				if currentPoints >= cost then
 					if session:subtractPoints( cost ) then
 						-- Item successfully bought.
 						-- TODO: Add some fanfare here and write out the new settings.
 						settings:setItemBought( item.name )
-						session:setActiveItem( item.type, item.name )
+						settings:setActiveItem( item.type, item.name )
 						composer.hideOverlay()
 					else
 						-- Just in case we somehow get this far and then the session model isn't able to subtract points.
@@ -176,6 +175,7 @@ function scene:show( event )
 						}
 						local errorText = display.newText( errorTextOptions )
 						errorText:setFillColor( 0, 0, 0)
+						sceneGroup:insert( errorText )
 						end
 				else
 					textGroup.alpha = 0
@@ -191,6 +191,7 @@ function scene:show( event )
 					}
 					local errorText = display.newText( errorTextOptions )
 					errorText:setFillColor( 0, 0, 0)
+					sceneGroup:insert( errorText )
 				end
 			end
 		end
@@ -201,12 +202,13 @@ function scene:show( event )
 			if phase == "began" then
 			elseif phase == "ended" then
 				session.setActiveItem( item.type, item.name )
+				composer.hideOverlay()
 			end
 		end
 
 		if equipButton ~= nil then
 			equipButton:addEventListener( "touch", equipPressed )
-		else
+		elseif buyButton ~= nil then
 			buyButton:addEventListener( "touch", buyPressed )
 		end
 	--------------------------------------------------
@@ -233,7 +235,12 @@ function scene:hide( event )
 	------------------------------------------------
 	elseif ( phase == "did" ) then
 		backButton:removeEventListener( "touch", backPressed )
-		buyButton:removeEventListener( "touch", buyPressed )
+
+		if equipButton ~= nil then
+			equipButton:removeEventListener( "touch", equipPressed )
+		elseif buyButton ~= nil then
+			buyButton:removeEventListener( "touch", buyPressed )
+		end
 	end
 end
 
