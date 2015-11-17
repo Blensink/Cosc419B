@@ -5,6 +5,9 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
+local session = require( "model.sessionModel" )
+local difficulty = require( "model.difficultyModel" )
+
 local overlayGroup = display.newGroup()
 local rightButtonGroup
 local leftButtonGroup
@@ -61,9 +64,41 @@ function scene:create( event )
 		rightButtonGroup = display.newGroup()
 		rightButtonGroup:insert( rightButton )
 	elseif status == 1 then
-		gameText = display.newImageRect( "img/correct.png", 200, 100 )
-		gameText.x = backgroundRect.x
-		gameText.y = backgroundRect.y - backgroundRect.height/2 + gameText.height*3/4
+		-- If this is a custom game, add some dollarydoos and show one path.
+		if params.puzzleType == "custom" then
+			session.getInfo()
+			local currentPoints = session.getPoints()
+
+			-- Add points based on how well they did.
+			-- For now, dummy.
+			local pointsEarned = difficulty:addPoints( params.time )
+			print( "earned", pointsEarned)
+			session:addPoints( pointsEarned )
+			session.saveInfo()
+
+			gameText = display.newImageRect( "img/correct.png", 200, 100 )
+			gameText.x = backgroundRect.x
+			gameText.y = backgroundRect.y - backgroundRect.height/2 + gameText.height/2 + 10
+		
+			local pointsTextOptions = 
+			{
+			    --parent = textGroup,
+			    text = "You earned " .. pointsEarned .. " points!",
+			    x = display.contentCenterX,
+			    y = display.contentCenterY + 25,
+			    width = display.contentWidth - 50,
+			    font = native.systemFontBold,   
+			    fontSize = 24,
+			    align = "center"  --new alignment parameter
+			}		
+			local pointsText = display.newText( pointsTextOptions )
+			pointsText:setFillColor( 0, 0, 0 )
+
+		else
+			gameText = display.newImageRect( "img/correct.png", 200, 100 )
+			gameText.x = backgroundRect.x
+			gameText.y = backgroundRect.y - backgroundRect.height/2 + gameText.height*3/4
+		end
 
 		local rightButton = display.newImageRect( "img/next.png", 100, 50 )
 		rightButton.x = backgroundRect.x*3/2

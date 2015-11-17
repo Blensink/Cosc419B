@@ -8,23 +8,14 @@ local scene = composer.newScene()
 local sessionModel = require( "model.sessionModel" )
 local analytics = require( "model.analyticsModel" )
 
-local gameTime = require('element.timer')
+local object = require( "element.object" )
+local gameTime = require( "element.timer" )
 local gameTimer
 
-local array1Area
-local array2Area
-local object = require( 'element.object' )
 local objectTable = {}
-local doneButton
-
-local startTime
-local endTime
-
-local backgroundMusicPlaying
 
 local objectOriginX = display.contentWidth/6
 local objectOriginY = display.contentHeight/4
-
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
@@ -45,10 +36,6 @@ local objectOriginY = display.contentHeight/4
 function scene:create( event )
 	local sceneGroup = self.view
 
-	-----------------------------------------------------------------------------
-	-- Initialize the scene here.
-	-- Example: add display objects to "sceneGroup", add touch listeners, etc.
-	-----------------------------------------------------------------------------
 end
 
 --- Called twice, once BEFORE, and once immediately after scene has moved onscreen.
@@ -61,7 +48,6 @@ function scene:show( event )
 	-- BEFORE the scene has moved onscreen.
 	---------------------------------------
 	if ( phase == "will" ) then
-
 		startTime = os.time()
 		analytics.init()
 
@@ -91,7 +77,7 @@ function scene:show( event )
 		gameTimer = gameTime:new
 		{ 
 			timerGroup = display.newGroup(),
-			maxTime = 30,
+			maxTime = 30000,
 			width = 30,
 			height = 280,
 			x = display.contentWidth - 50,
@@ -112,8 +98,7 @@ function scene:show( event )
 		)
 
 		-- Get our current level from the session model, then get that level from the level file.
-		local levelInfo = sessionModel.getCurrentLevel()
-		print( "[GameScene] Loading level: ", sessionModel.level() )
+		local levelInfo = sessionModel.getRandomCustomLevel()
 
 		-- Now that we know what our level is going to look like make the objects for it.
 		for key, puzzleObject in pairs(levelInfo) do
@@ -127,17 +112,10 @@ function scene:show( event )
 			newObject.group.x = objectOriginX + 60*xModifier
 			newObject.group.y = objectOriginY + 60*yModifier
 
+			-- This is sort of strange, but if we index the object by their display group,
+			--	it allows us to reference an object through event.target in an event listener.
 			objectTable[newObject.group] = newObject
 			sceneGroup:insert( newObject.group )
-		end
-
-		-- Check if we've done the tutorial yet
-		local currentLevel = sessionModel.level()
-
-		if not sessionModel:tutorialComplete() and currentLevel == 0 then
-			gameTimer.pause()
-
-			composer.showOverlay( "view.tutorialNotDoneOverlay" )
 		end
 
 	--------------------------------------------------
@@ -235,7 +213,9 @@ function scene:show( event )
 				{
 					params = 
 					{
-						status = puzzleCorrect
+						status = puzzleCorrect,
+						puzzleType = "custom",
+						time = endTime - startTime
 					}
 				}
 				composer.showOverlay( "view.puzzleDoneOverlay", puzzleDoneOptions )
@@ -245,10 +225,7 @@ function scene:show( event )
 		end
 
 		doneButton:addEventListener( "touch", doneTouched)
-				-- Last things last begin the music
-		local backgroundMusic = audio.loadStream( "sound/elevatormusic1.wav")
-		backgroundMusicPlaying = audio.play( backgroundMusic, { loops = -1, fadein = 1000 } )
-
+		
 	end
 end
 
@@ -263,12 +240,6 @@ function scene:hide( event )
 	----------------------------------------------
 	if ( phase == "will" ) then
 
-		-----------------------------------------------------------------------------
-		-- Called when the scene is on screen (but is about to go off screen).
-		-- Insert code here to "pause" the scene.
-		-- Example: stop timers, stop animation, stop audio, etc.
-		-----------------------------------------------------------------------------
-		audio.stop()
 	------------------------------------------------
 	-- When the scene has finished moving offscreen.
 	------------------------------------------------
@@ -277,11 +248,6 @@ function scene:hide( event )
 		for key, object in pairs( objectTable ) do
 			object.group:removeEventListener( "touch", objectTouched )
 		end
-
-		-----------------------------------------------------------------------------
-		-- Called immediately after scene goes off screen.
-		-----------------------------------------------------------------------------
-
 	end
 end
 
@@ -302,30 +268,9 @@ end
 -- Custom functions that provide additional functionality and are called from this Scene or its associated controller.
 -- @section custom
 
-function scene:puzzleFinished()
-	sessionModel.nextLevel()
-	sessionModel.saveInfo()
-	composer.gotoScene( "view.story.storyScene" .. sessionModel.level() )
-end
-
-function scene:goHome()
-	composer.gotoScene( "view.titleScene" )
-end
-
 function scene:restart()
-	composer.gotoScene( "view.gameScene")
+	composer.gotoScene( "view.playCustomScene" )
 end
-
-function scene:gotoTutorial()
-	composer.gotoScene( "view.tutorialScene" )
-end
-
-function scene:skipButtonPressed()
-	composer.hideOverlay()
-	audio.resume()
-	gameTimer:resume()
-end
-
 ---------------------------------------------------------------------------------
 -- END OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------

@@ -13,6 +13,27 @@
 */
 if( $_POST['ssk'] == "w:6pbL6Yt;_wjsa^" )
 {
-	$level = $_POST['level']
+	switch( $_POST['operation'] )
+	{
+		case "store":
+			$level = $_POST['level'];
+
+			$file = fopen( "games/".$_POST['levelName'].".txt", "w");
+			fwrite( $file, $level );
+			fclose( $file );
+
+			break;
+		
+		case "getRandom":
+			$files = scandir( "/games" );
+
+			$randomKey = array_rand( $files );
+			$filename = $files[$randomKey];
+			$file = fopen( "games/".$filename, "r" );
+			echo fread( $file, filesize( "games/".$filename ) );
+			fclose( $file );
+			break;
+	}
+
 }
 ?>

@@ -178,7 +178,6 @@ function scene:show( event )
 			if phase == "began" then
 				doneButton:setFillColor( unpack( settings.getButtonOnColor() ) )
 			elseif phase == "ended" then
-				doneButton:setFillColor( unpack( settings.getButtonOffColor() ) )
 				-- TODO: Add a confirm action here.
 
 				-- Hoo boy, here we go.

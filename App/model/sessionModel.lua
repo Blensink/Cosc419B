@@ -3,6 +3,8 @@ sessionModel = {}
 local json = require( "json" )
 local network = require( "model.networkModel" )
 
+local lfs = require( "lfs" )
+
 local userInfo = {}
 local seenDisclaimer = false
 
@@ -90,7 +92,7 @@ end
 function sessionModel:getCurrentLevel()
 	if userInfo["currentLevel"] == nil then
 		userInfo["currentLevel"] = 0
-	else 
+	else
 		currentLevel = userInfo["currentLevel"]
 	end
 
@@ -194,11 +196,11 @@ function sessionModel:tutorialComplete()
 	return userInfo["tutorialComplete"]
 end
 
--------------------------------------------------------------------------
---
--- Custom game stuff.
---
--------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--                                                                            --
+-- Custom Game Stuff.                                                         --
+--                                                                            --
+--------------------------------------------------------------------------------
 
 function sessionModel:getIconPack()
 	print( "[SessionModel] Getting Icon Pack" )
@@ -226,10 +228,19 @@ function sessionModel:getIconPack()
 end
 
 function sessionModel:writeLevel( puzzleTable )
-	print( "[SessionModel] Writing out custom level" )	
+	print( "[SessionModel] Writing out custom level" )
 
+	-- Check if there's already a custom game folder, if not make it.
+	local folderPath = system.pathForFile( "", system.DocumentsDirectory )
+	lfs.chdir( folderPath )
+	if not lfs.chdir( "games/" ) then
+		lfs.mkdir( "games/" )
+		lfs.chdir( "games/" )
+	end
+
+	print( "Writing out twice for something")
 	-- Path for the file to write
-	local path = system.pathForFile( tostring(math.random( 0, 10000000 )) .. ".txt", system.DocumentsDirectory )
+	local path = system.pathForFile( "games/" .. tostring(math.random( 0, 10000000 )) .. ".txt", system.DocumentsDirectory )
 
 	-- Open the file handle
 	local file, errorString = io.open( path, "w" )
@@ -247,6 +258,97 @@ function sessionModel:writeLevel( puzzleTable )
 	end
 
 	file = nil
+end
+
+function sessionModel:getRandomCustomLevel()
+	print( "[SessionModel] Getting a random custom level." )
+
+	local fileTable = {}
+
+	local path = system.pathForFile( "games/", system.DocumentsDirectory )
+	for file in lfs.dir(path) do
+   		-- Hacky way to make sure the file is a .txt and therefore a game.
+   		if ( string.sub( file, string.len(file)-3, string.len(file) ) == ".txt" ) then
+   			table.insert( fileTable, file )
+   		end
+	end
+
+	index = math.random( 1, #fileTable )
+	local newLevel = system.pathForFile( "games/"..fileTable[index], system.DocumentsDirectory )
+
+	-- Open the file handle
+	local file, errorString = io.open( newLevel, "r" )
+
+	if not file then
+	    -- Error occurred; output the cause
+	    print( "File error: " .. errorString )
+	else
+	    -- Read data from file
+	    local contents = file:read( "*a" )
+
+	    levelInfo = json.decode( contents )
+
+	    -- Close the file handle
+	    io.close( file )
+
+	    return levelInfo
+	end
+
+	file = nil
+end
+
+function sessionModel:getPoints()
+	if userInfo["points"] == nil then
+		return 0
+	else
+		return userInfo["points"]
+	end
+end
+
+function sessionModel:addPoints( amount )
+	if userInfo["points"] == nil then
+		userInfo["points"] = amount
+	else
+		userInfo["points"] = userInfo["points"] + amount
+	end
+end
+
+function sessionModel:subtractPoints( amount )
+	local points = tonumber( userInfo["points"] )
+	print("Current points:", points)
+	if points == nil then
+		return false
+	elseif points < amount then
+		return false
+	else
+		userInfo["points"] = userInfo["points"] - amount
+		return true
+	end
+end
+
+--------------------------------------------------------------------------------
+--                                                                            --
+-- Store Related Session Tracking.                                            --
+--                                                                            --
+--------------------------------------------------------------------------------
+
+function sessionModel:checkIfBought( itemName )
+	if userInfo[itemName] == nil or userInfo[itemName] == "false" then
+		return false
+	elseif userInfo[itemName] == "true" then
+		return true
+	else
+		return false
+	end
+end
+
+function sessionModel:setItemBought( itemName )
+	userInfo[itemName] = true
+end
+
+function sessionModel:setActiveItem( type, name )
+	print( type, name )
+	userInfo[type] = name
 end
 
 return sessionModel

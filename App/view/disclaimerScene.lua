@@ -38,14 +38,14 @@ function scene:create( event )
 
 	local disclaimerTextOptions = 
 	{
-    --parent = textGroup,
-    text = "We're going to save some data about your gameplay for educational purposes.",     
-    x = display.contentCenterX,
-    y = display.contentCenterY,
-    width = display.contentWidth - 50,
-    font = native.systemFontBold,   
-    fontSize = 24,
-    align = "center"  --new alignment parameter
+	    --parent = textGroup,
+	    text = "We're going to save some data about your gameplay for educational purposes.",     
+	    x = display.contentCenterX,
+	    y = display.contentCenterY,
+	    width = display.contentWidth - 50,
+	    font = native.systemFontBold,   
+	    fontSize = 24,
+	    align = "center"  --new alignment parameter
 	}
 
 	local disclaimerText = display.newText( disclaimerTextOptions )

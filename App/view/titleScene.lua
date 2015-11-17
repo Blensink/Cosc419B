@@ -14,11 +14,13 @@ local storyButtonGroup
 local tutorialButtonGroup
 local creditsButtonGroup
 local customButtonGroup
+local storeButtonGroup
 
 local storyButton
 local tutorialButton
 local creditsButton
 local customButton
+local storeButton
 
 ---------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
@@ -82,6 +84,14 @@ function scene:create( event )
 
 	customButtonGroup = display.newGroup()
 	customButtonGroup:insert( customButton )
+
+	storeButton = display.newImageRect( "img/credits.png", 100, 50 )
+	storeButton:setFillColor( unpack( settings.getButtonOffColor() ) )
+	storeButton.x = display.contentCenterX/2
+	storeButton.y = display.contentCenterY + 200
+
+	storeButtonGroup = display.newGroup()
+	storeButtonGroup:insert( storeButton )
 
 	sceneGroup:insert( background )
 	sceneGroup:insert( titleGroup )
@@ -162,10 +172,22 @@ function scene:show( event )
 			end
 		end
 
+		function storePressed( event )
+			local phase = event.phase
+
+			if phase == "began" then
+				storeButton:setFillColor( unpack( settings.getButtonOnColor() ) )
+			elseif phase == "ended" then
+				storeButton:setFillColor( unpack( settings.getButtonOffColor() ) )
+				composer.gotoScene( "view.storeScene" )
+			end
+		end
+
 		storyButtonGroup:addEventListener( "touch", storyPressed )
 		tutorialButtonGroup:addEventListener( "touch", tutorialPressed ) 
 		creditsButtonGroup:addEventListener( "touch", creditsPressed ) 
 		customButtonGroup:addEventListener( "touch", customPressed )
+		storeButtonGroup:addEventListener( "touch", storePressed )
 
 		-- Last things last begin the music TODO: RESUME MUSIC
 	--	local backgroundMusic = audio.loadStream( "sound/elevatormusic1.wav")
@@ -192,6 +214,7 @@ function scene:hide( event )
 		tutorialButtonGroup:removeEventListener( "touch", tutorialPressed ) 
 		creditsButtonGroup:removeEventListener( "touch", creditsPressed ) 
 		customButtonGroup:removeEventListener( "touch", customPressed )
+		storeButtonGroup:removeEventListener( "touch", storePressed )
 
 		audio.stop()
 		-----------------------------------------------------------------------------
