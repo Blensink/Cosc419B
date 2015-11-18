@@ -58,7 +58,7 @@ function scene:create( event )
 	backButtonGroup:insert( backButton )
 	sceneGroup:insert( backButtonGroup )
 
-	createButton = display.newImageRect( "img/back.png", 100, 50 )
+	createButton = display.newImageRect( "img/create.png", 100, 50 )
 	createButton:setFillColor( unpack( settings.getButtonOffColor() ) )
 	createButton.x = display.contentCenterX
 	createButton.y = display.contentCenterY - 50
@@ -67,7 +67,7 @@ function scene:create( event )
 	createButtonGroup:insert( createButton )
 	sceneGroup:insert( createButtonGroup )
 
-	playButton = display.newImageRect( "img/back.png", 100, 50 )
+	playButton = display.newImageRect( "img/playCustom.png", 100, 50 )
 	playButton:setFillColor( unpack( settings.getButtonOffColor() ) )
 	playButton.x = display.contentCenterX
 	playButton.y = display.contentCenterY + 50
@@ -87,7 +87,7 @@ function scene:show( event )
 	-- BEFORE the scene has moved onscreen.
 	---------------------------------------
 	if ( phase == "will" ) then
-	
+
 	--------------------------------------------------
 	-- Immediately after the scene has moved onscreen.
 	--------------------------------------------------

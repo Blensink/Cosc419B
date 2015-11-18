@@ -48,7 +48,7 @@ function scene:create( event )
 
 	local itemImage = display.newImageRect( item.imgName, 100, 100 )
 	itemImage.x = display.contentCenterX
-	itemImage.y = backgroundRect.y - backgroundRect.height/2 + itemImage.height/2
+	itemImage.y = backgroundRect.y - backgroundRect.height/2 + itemImage.height/2 + 5
 	sceneGroup:insert( itemImage )
 
 	local textOptions =
@@ -90,7 +90,7 @@ function scene:create( event )
 	}
 	local description = display.newText( descriptionOptions )
 	description:setFillColor( 0.2, 0.2, 0.2 )
-	description.y = costText.y + costText.height/2 + description.height/2 + 20
+	description.y = costText.y + costText.height/2 + description.height/2 + 10
 	textGroup:insert( description )
 
 	backButton = display.newImageRect( "img/back.png", 75, 50 )
@@ -102,13 +102,13 @@ function scene:create( event )
 	if session:checkIfBought( item.name ) then
 		-- This is two statements to capture non-equippable bought items.
 		if item.type == "musicPack" or item.type == "theme" then
-			equipButton = display.newImageRect( "img/home.png", 75, 50 )
+			equipButton = display.newImageRect( "img/equip.png", 75, 50 )
 			equipButton.x = backgroundRect.x + backgroundRect.width/2 - equipButton.width/2 - 5
 			equipButton.y = backgroundRect.y + backgroundRect.height/2 - equipButton.height/2 - 5
 			textGroup:insert( equipButton )
 		end
 	else
-		buyButton = display.newImageRect( "img/back.png", 75, 50 )
+		buyButton = display.newImageRect( "img/buy.png", 75, 50 )
 		buyButton.x = backgroundRect.x + backgroundRect.width/2 - buyButton.width/2 - 5
 		buyButton.y = backgroundRect.y + backgroundRect.height/2 - buyButton.height/2 - 5
 		textGroup:insert( buyButton )

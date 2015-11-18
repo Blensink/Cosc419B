@@ -11,7 +11,6 @@ local analytics = require( "model.analyticsModel" )
 local item = require( "element.storeItem" )
 
 local backButton
-
 local backButtonGroup
 
 local storeItemTable = {}
@@ -80,7 +79,7 @@ function scene:create( event )
 	-- TODO: Check if an item has already been purchased
 	local storeItem1 = item:new(
 		{
-			imgName = "img/back.png",
+			imgName = "img/timeExtender.png",
 			cost = 10,
 			name = "Time Extender",
 			description = "Adds 10 seconds to each puzzle.",
@@ -122,7 +121,7 @@ function scene:create( event )
 
 	local storeItem4 = item:new(
 		{
-			imgName = "img/back.png",
+			imgName = "img/musicPack.png",
 			cost = 10,
 			name = "Alternate music pack #2.",
 			description = "Changes the music to match the epicness of your performance",
@@ -136,7 +135,7 @@ function scene:create( event )
 
 	local storeItem5 = item:new(
 		{
-			imgName = "img/cat.png",
+			imgName = "img/cats.png",
 			cost = 10,
 			name = "Cats",
 			description = "Everything is cats.",
@@ -150,7 +149,7 @@ function scene:create( event )
 
 	local storeItem6 = item:new(
 		{
-			imgName = "img/back.png",
+			imgName = "img/noMusic.png",
 			cost = 10,
 			name = "No Music",
 			description = "Turn off that infernal racket. For those who hate fun.",
