@@ -53,7 +53,7 @@ function scene:create( event )
 
 	local textOptions =
 	{
-		text = "Are you sure you want to buy " .. item.name,
+		text = "Are you sure you want to buy " .. string.lower( item.name ),
 		x = display.contentCenterX,
 		y = display.contentCenterY,
 		width = backgroundRect.width - 10,
@@ -62,7 +62,7 @@ function scene:create( event )
 	}
 	local text = display.newText( textOptions )
 	text:setFillColor( 0, 0, 0 )
-	text.y = itemImage.y + itemImage.height/2 + text.height/2
+	text.y = itemImage.y + itemImage.height/2 + text.height/2 + 10
 	textGroup:insert( text )
 
 	local costOptions =
@@ -90,7 +90,7 @@ function scene:create( event )
 	}
 	local description = display.newText( descriptionOptions )
 	description:setFillColor( 0.2, 0.2, 0.2 )
-	description.y = costText.y + costText.height/2 + description.height/2
+	description.y = costText.y + costText.height/2 + description.height/2 + 20
 	textGroup:insert( description )
 
 	backButton = display.newImageRect( "img/back.png", 75, 50 )

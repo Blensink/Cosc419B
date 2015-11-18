@@ -99,6 +99,7 @@ function scene:create( event )
 	sceneGroup:insert( tutorialButtonGroup )
 	sceneGroup:insert( creditsButtonGroup )
 	sceneGroup:insert( customButtonGroup )
+	sceneGroup:insert( storeButtonGroup )
 end
 
 --- Called twice, once BEFORE, and once immediately after scene has moved onscreen.
@@ -130,9 +131,9 @@ function scene:show( event )
 			local phase = event.phase
 
 			if phase == "began" then
-				storyButton:setFillColor( unpack( settings.getButtonOnColor() ) )				
+				storyButton:setFillColor( unpack( settings.getButtonOnColor() ) )
 			elseif phase == "ended" then
-				storyButton:setFillColor( unpack( settings.getButtonOffColor() ) )				
+				storyButton:setFillColor( unpack( settings.getButtonOffColor() ) )
 				local level = sessionModel.level()
 				print( "[TitleScene] Loading level:", sessionModel.level())
 				composer.gotoScene( "view.story.storyScene" .. level )
@@ -141,7 +142,7 @@ function scene:show( event )
 
 		function tutorialPressed( event )
 			local phase = event.phase
-				
+
 			if phase == "began" then
 				tutorialButton:setFillColor( unpack( settings.getButtonOnColor() ) )
 			elseif phase == "ended" then
@@ -184,15 +185,15 @@ function scene:show( event )
 		end
 
 		storyButtonGroup:addEventListener( "touch", storyPressed )
-		tutorialButtonGroup:addEventListener( "touch", tutorialPressed ) 
-		creditsButtonGroup:addEventListener( "touch", creditsPressed ) 
+		tutorialButtonGroup:addEventListener( "touch", tutorialPressed )
+		creditsButtonGroup:addEventListener( "touch", creditsPressed )
 		customButtonGroup:addEventListener( "touch", customPressed )
 		storeButtonGroup:addEventListener( "touch", storePressed )
 
 		-- Last things last begin the music TODO: RESUME MUSIC
 	--	local backgroundMusic = audio.loadStream( "sound/elevatormusic1.wav")
 	--	local backgroundMusicPlaying = audio.play( backgroundMusic, { loops = -1, fadein = 1000 } )
-	
+
 		-- Log the app open event
 		analytics:init()
 		analytics.appOpened()
@@ -211,8 +212,8 @@ function scene:hide( event )
 	if ( phase == "will" ) then
 
 		storyButtonGroup:removeEventListener( "touch", storyPressed )
-		tutorialButtonGroup:removeEventListener( "touch", tutorialPressed ) 
-		creditsButtonGroup:removeEventListener( "touch", creditsPressed ) 
+		tutorialButtonGroup:removeEventListener( "touch", tutorialPressed )
+		creditsButtonGroup:removeEventListener( "touch", creditsPressed )
 		customButtonGroup:removeEventListener( "touch", customPressed )
 		storeButtonGroup:removeEventListener( "touch", storePressed )
 

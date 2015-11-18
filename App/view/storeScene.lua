@@ -36,6 +36,11 @@ local storeItemTable = {}
 function scene:create( event )
 	local sceneGroup = self.view
 
+	local testTable = {}
+	testTable["data"] = 1
+	testTable["data21"] = 2
+	analytics:storeObject( "testData", testTable )
+
 	local background = display.newImageRect( "img/questionBackground.png", display.contentHeight, display.contentHeight )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
@@ -50,9 +55,9 @@ function scene:create( event )
 	local pointsTextOptions =
 	{
 	    --parent = textGroup,
-	    text = "You've earned " .. currentPoints .. " points!",
+	    text = "You've earned " .. currentPoints .. " points! \n Spend them here on cool stuff.",
 	    x = display.contentCenterX,
-	    y = 100,
+	    y = 150,
 	    width = display.contentWidth - 50,
 	    font = native.systemFontBold,
 	    fontSize = 24,
@@ -83,7 +88,7 @@ function scene:create( event )
 			group = display.newGroup()
 		} )
 	storeItem1.group.x = display.contentCenterX/3
-	storeItem1.group.y = display.contentCenterY - 60
+	storeItem1.group.y = display.contentCenterY - 10
 	storeItemTable[storeItem1.group] = storeItem1
 	sceneGroup:insert( storeItem1.group )
 
@@ -97,7 +102,7 @@ function scene:create( event )
 			group = display.newGroup()
 		} )
 	storeItem2.group.x = display.contentCenterX
-	storeItem2.group.y = display.contentCenterY - 60
+	storeItem2.group.y = display.contentCenterY - 10
 	storeItemTable[storeItem2.group] = storeItem2
 	sceneGroup:insert( storeItem2.group )
 
@@ -111,7 +116,7 @@ function scene:create( event )
 			group = display.newGroup()
 		} )
 	storeItem3.group.x = display.contentCenterX*5/3
-	storeItem3.group.y = display.contentCenterY - 60
+	storeItem3.group.y = display.contentCenterY - 10
 	storeItemTable[storeItem3.group] = storeItem3
 	sceneGroup:insert( storeItem3.group )
 
@@ -125,7 +130,7 @@ function scene:create( event )
 			group = display.newGroup()
 		} )
 	storeItem4.group.x = display.contentCenterX/3
-	storeItem4.group.y = display.contentCenterY + 60
+	storeItem4.group.y = display.contentCenterY + 100
 	storeItemTable[storeItem4.group] = storeItem4
 	sceneGroup:insert( storeItem4.group )
 
@@ -139,7 +144,7 @@ function scene:create( event )
 			group = display.newGroup()
 		} )
 	storeItem5.group.x = display.contentCenterX
-	storeItem5.group.y = display.contentCenterY + 60
+	storeItem5.group.y = display.contentCenterY + 100
 	storeItemTable[storeItem5.group] = storeItem5
 	sceneGroup:insert( storeItem5.group )
 
@@ -153,7 +158,7 @@ function scene:create( event )
 			group = display.newGroup()
 		} )
 	storeItem6.group.x = display.contentCenterX*5/3
-	storeItem6.group.y = display.contentCenterY + 60
+	storeItem6.group.y = display.contentCenterY + 100
 	storeItemTable[storeItem6.group] = storeItem6
 	sceneGroup:insert( storeItem6.group )
 end

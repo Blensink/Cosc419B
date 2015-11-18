@@ -11,7 +11,6 @@ local seenDisclaimer = false
 function sessionModel:saveInfo()
 	--userInfo["seenDisclaimer"] = seenDisclaimer
 	local output = json.encode( userInfo )
-	print( "UserInfo:", userInfo["points"])
 
 	-- Path for the file to write
 	local path = system.pathForFile( "userInfo.txt", system.DocumentsDirectory )
