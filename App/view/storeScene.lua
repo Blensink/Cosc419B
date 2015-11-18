@@ -80,7 +80,7 @@ function scene:create( event )
 	local storeItem1 = item:new(
 		{
 			imgName = "img/timeExtender.png",
-			cost = 10,
+			cost = 100,
 			name = "Time Extender",
 			description = "Adds 10 seconds to each puzzle, for the deliberate gamer.",
 			type = "timeExtender",
@@ -94,7 +94,7 @@ function scene:create( event )
 	local storeItem2 = item:new(
 		{
 			imgName = "img/boost.png",
-			cost = 10,
+			cost = 500,
 			name = "Point Booster",
 			description = "+10% points on all completed custom levels.",
 			type = "booster",
@@ -122,7 +122,7 @@ function scene:create( event )
 	local storeItem4 = item:new(
 		{
 			imgName = "img/musicPack.png",
-			cost = 10,
+			cost = 100,
 			name = "Alternate music pack #2.",
 			description = "Changes the music to match the epicness of your performance.",
 			type = "musicPack",
@@ -136,7 +136,7 @@ function scene:create( event )
 	local storeItem5 = item:new(
 		{
 			imgName = "img/cats.png",
-			cost = 10,
+			cost = 10000,
 			name = "Cats",
 			description = "Everything is cats. Yes, everything.",
 			type = "theme",
@@ -150,7 +150,7 @@ function scene:create( event )
 	local storeItem6 = item:new(
 		{
 			imgName = "img/noMusic.png",
-			cost = 10,
+			cost = 1000000,
 			name = "No Music",
 			description = "Turn off that infernal racket. For those who hate fun.",
 			type = "musicPack",
