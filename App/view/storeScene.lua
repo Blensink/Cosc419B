@@ -82,7 +82,7 @@ function scene:create( event )
 			imgName = "img/timeExtender.png",
 			cost = 10,
 			name = "Time Extender",
-			description = "Adds 10 seconds to each puzzle.",
+			description = "Adds 10 seconds to each puzzle, for the deliberate gamer.",
 			type = "timeExtender",
 			group = display.newGroup()
 		} )
@@ -93,10 +93,10 @@ function scene:create( event )
 
 	local storeItem2 = item:new(
 		{
-			imgName = "img/back.png",
+			imgName = "img/boost.png",
 			cost = 10,
 			name = "Point Booster",
-			description = "+10% points",
+			description = "+10% points on all completed custom levels.",
 			type = "booster",
 			group = display.newGroup()
 		} )
@@ -107,11 +107,11 @@ function scene:create( event )
 
 	local storeItem3 = item:new(
 		{
-			imgName = "img/back.png",
+			imgName = "img/leader.png",
 			cost = 10,
-			name = "Something Else",
-			description = "I need another game-effecting item.",
-			type = "dunno",
+			name = "Leaderboard Points",
+			description = "Leaders get to make new custom games. And win. At life.",
+			type = "points",
 			group = display.newGroup()
 		} )
 	storeItem3.group.x = display.contentCenterX*5/3
@@ -124,7 +124,7 @@ function scene:create( event )
 			imgName = "img/musicPack.png",
 			cost = 10,
 			name = "Alternate music pack #2.",
-			description = "Changes the music to match the epicness of your performance",
+			description = "Changes the music to match the epicness of your performance.",
 			type = "musicPack",
 			group = display.newGroup()
 		} )
@@ -138,7 +138,7 @@ function scene:create( event )
 			imgName = "img/cats.png",
 			cost = 10,
 			name = "Cats",
-			description = "Everything is cats.",
+			description = "Everything is cats. Yes, everything.",
 			type = "theme",
 			group = display.newGroup()
 		} )
