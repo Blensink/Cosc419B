@@ -77,7 +77,7 @@ function scene:create( event )
 	creditsButtonGroup = display.newGroup()
 	creditsButtonGroup:insert( creditsButton )
 
-	customButton = display.newImageRect( "img/credits.png", 100, 50 )
+	customButton = display.newImageRect( "img/custom.png", 100, 50 )
 	customButton:setFillColor( unpack( settings.getButtonOffColor() ) )
 	customButton.x = display.contentCenterX*3/2
 	customButton.y = display.contentCenterY + 200
@@ -85,7 +85,7 @@ function scene:create( event )
 	customButtonGroup = display.newGroup()
 	customButtonGroup:insert( customButton )
 
-	storeButton = display.newImageRect( "img/credits.png", 100, 50 )
+	storeButton = display.newImageRect( "img/store.png", 100, 50 )
 	storeButton:setFillColor( unpack( settings.getButtonOffColor() ) )
 	storeButton.x = display.contentCenterX/2
 	storeButton.y = display.contentCenterY + 200
