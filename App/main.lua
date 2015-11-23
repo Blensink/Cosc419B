@@ -14,7 +14,7 @@ display.setDefault("background", 1.0, 1.0, 1.0)
 ---------------------------------------------------------------------------
 local displayStage = display.getCurrentStage()
 displayStage:insert(composer.stage)
-composer.gotoScene("view.storeScene")
+composer.gotoScene("view.disclaimerScene")
 
 ------------------
 -- And here we go!
