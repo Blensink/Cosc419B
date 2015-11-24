@@ -5,7 +5,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-local sessionModel = require( "model.sessionModel" )
+local session = require( "model.sessionModel" )
 local analytics = require( "model.analyticsModel" )
 
 local object = require( "element.object" )
@@ -13,6 +13,10 @@ local gameTime = require( "element.timer" )
 local gameTimer
 
 local objectTable = {}
+
+local maxGameTime = 30
+local endTime
+local pointsEarned = 1
 
 local objectOriginX = display.contentWidth/6
 local objectOriginY = display.contentHeight/4
@@ -77,7 +81,7 @@ function scene:show( event )
 		gameTimer = gameTime:new
 		{ 
 			timerGroup = display.newGroup(),
-			maxTime = 30000,
+			maxTime = maxGameTime,
 			width = 30,
 			height = 280,
 			x = display.contentWidth - 50,
@@ -98,7 +102,7 @@ function scene:show( event )
 		)
 
 		-- Get our current level from the session model, then get that level from the level file.
-		local levelInfo = sessionModel.getRandomCustomLevel()
+		local levelInfo = session.getRandomCustomLevel()
 
 		-- Now that we know what our level is going to look like make the objects for it.
 		for key, puzzleObject in pairs(levelInfo) do
@@ -194,7 +198,7 @@ function scene:show( event )
 						end
 					else
 						puzzleCorrect = 2
-						analytics:puzzleAbandon( sessionModel.level() )
+						analytics:puzzleAbandon( session.level() )
 						local wrongSound = audio.loadSound( "sound/femalewrong.wav")
 						local onWrongSound = audio.play( wrongSound )
 					end
@@ -206,16 +210,27 @@ function scene:show( event )
 				end
 
 				endTime = os.time()
-				local level = sessionModel.level()
+				local level = session.level()
 				analytics:puzzleFinished( level, startTime, endTime )
 
+				local timeElapsed = endTime - startTime
+				if timeElapsed < maxGameTime/3 then
+					pointsEarned = 3
+				elseif maxGameTime/3 < timeElapsed and timeElapsed < maxGameTime*2/3 then
+					pointsEarned = 2
+				else
+					pointsEarned = 1
+				end
+
+				print( "points earned: ", pointsEarned, timeElapsed, maxGameTime )
 				local puzzleDoneOptions = 
 				{
 					params = 
 					{
 						status = puzzleCorrect,
 						puzzleType = "custom",
-						time = endTime - startTime
+						time = endTime - startTime,
+						amount = pointsEarned
 					}
 				}
 				composer.showOverlay( "view.puzzleDoneOverlay", puzzleDoneOptions )
@@ -268,9 +283,27 @@ end
 -- Custom functions that provide additional functionality and are called from this Scene or its associated controller.
 -- @section custom
 
-function scene:restart()
-	composer.gotoScene( "view.playCustomScene" )
+function scene:puzzleFinished()
+	-- Figure out how much time it took them and give them points that matter.
+	session:addPoints( pointsEarned )
+	session.saveInfo()
+	composer.gotoScene( "view.customGameScene" )
 end
+
+function scene:goHome()
+	composer.gotoScene( "view.titleScene" )
+end
+
+function scene:restart()
+	composer.gotoScene( "view.playCustomScene")
+end
+
+function scene:skipButtonPressed()
+	composer.hideOverlay()
+	audio.resume()
+	gameTimer:resume()
+end
+
 ---------------------------------------------------------------------------------
 -- END OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
