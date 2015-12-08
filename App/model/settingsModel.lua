@@ -13,6 +13,22 @@ function settingsModel:getButtonOnColor()
 	return buttonOnColor
 end
 
+function settingsModel:getAudioTrack()
+	local audio = session.getAudioTrack()
+
+	if audio ~= nil then
+		if audio == "No Music" then
+			return nil
+		elseif audio == "Alternate music pack #2" then
+			return "sound/elevatormusic1.wav" --TODO: add new music pack here.
+		else
+			return "sound/elevatormusic1.wav"
+		end
+	else
+		return "sound/elevatormusic1.wav"
+	end
+end
+
 --------------------------------------------------------------------------------
 --                                                                            --
 -- Store Related Settings.                                                    --

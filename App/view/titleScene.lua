@@ -191,8 +191,11 @@ function scene:show( event )
 		storeButtonGroup:addEventListener( "touch", storePressed )
 
 		-- Last things last begin the music TODO: RESUME MUSIC
-	--	local backgroundMusic = audio.loadStream( "sound/elevatormusic1.wav")
-	--	local backgroundMusicPlaying = audio.play( backgroundMusic, { loops = -1, fadein = 1000 } )
+		-- local audio = settings.getAudioTrack()
+		-- if audio ~= nil then
+		-- 	local backgroundMusic = audio.loadStream( "sound/elevatormusic1.wav")
+		-- 	local backgroundMusicPlaying = audio.play( backgroundMusic, { loops = -1, fadein = 1000 } )
+		-- end
 
 		-- Log the app open event
 		analytics:init()

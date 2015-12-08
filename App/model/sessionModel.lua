@@ -344,11 +344,23 @@ function sessionModel:checkIfBought( itemName )
 end
 
 function sessionModel:setItemBought( itemName )
-	userInfo[itemName] = true
+	if itemName == "Leaderboard Points" then
+		if userInfo[itemName] == nil then
+			userInfo[itemName] = 1
+		else
+			userInfo[itemName] = userInfo[itemName] + 1
+		end
+	else
+		userInfo[itemName] = true
+	end
 end
 
 function sessionModel:setActiveItem( type, name )
 	userInfo[type] = name
+end
+
+function sessionModel:getAudioTrack()
+	return userInfo[musicPack]
 end
 
 return sessionModel
