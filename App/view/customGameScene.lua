@@ -5,7 +5,7 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 
-local sessionModel = require( "model.sessionModel" )
+local session = require( "model.sessionModel" )
 local analytics = require( "model.analyticsModel" )
 local settings = require( "model.settingsModel" )
 
@@ -170,7 +170,6 @@ end
 --- Custom functions.
 -- Custom functions that provide additional functionality and are called from this Scene or its associated controller.
 -- @section custom
-
 
 ---------------------------------------------------------------------------------
 -- END OF YOUR IMPLEMENTATION

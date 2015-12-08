@@ -6,7 +6,6 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 
 local session = require( "model.sessionModel" )
-local difficulty = require( "model.difficultyModel" )
 
 local overlayGroup = display.newGroup()
 local rightButtonGroup
@@ -71,7 +70,7 @@ function scene:create( event )
 
 			-- Add points based on how well they did.
 			-- For now, dummy.
-			local pointsEarned = difficulty:addPoints( params.time )
+			local pointsEarned = params.amount
 			print( "earned", pointsEarned)
 			session:addPoints( pointsEarned )
 			session.saveInfo()
@@ -93,6 +92,7 @@ function scene:create( event )
 			}		
 			local pointsText = display.newText( pointsTextOptions )
 			pointsText:setFillColor( 0, 0, 0 )
+			overlayGroup:insert( pointsText )
 
 		else
 			gameText = display.newImageRect( "img/correct.png", 200, 100 )
