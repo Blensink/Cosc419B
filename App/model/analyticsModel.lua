@@ -25,18 +25,20 @@ function analyticsModel:tutorialCompleted()
 	parse:logEvent( "TutorialComplete", { ["time"] = 1 } )
 end
 
-function analyticsModel:puzzleFinished( puzzleId, startTime, endTime )
-	parse:logEvent( "PuzzleComplete", { ["time"] = endTime-startTime, ["puzzle"] = puzzleId } )
+function analyticsModel:puzzleFinished( puzzleId, timeElapsed, pointsEarned )
+	parse:logEvent( "PuzzleComplete", { ["time"] = timeElapsed, ["puzzle"] = puzzleId, ["id"] = system.getInfo( "deviceID" ) } )
+	self:storeObject( "pointsEarned", pointsEarned )
 end
 
 function analyticsModel:puzzleAbandon( puzzleId )
-	parse:logEvent( "puzzleAbandon", { ["puzzleId"] = puzzleId } )
+	parse:logEvent( "puzzleAbandon", { ["puzzleId"] = puzzleId, ["id"] = system.getInfo( "deviceID" ) } )
+end
+
+function analyticsModel:storePoints()
 end
 
 function analyticsModel:storeObject( class, data )
-	print( "store called")
 		local function onCreateObject( event )
-			print( "on create called")
 			for k, v in pairs( event ) do
 				print( k,v )
 			end
@@ -44,7 +46,6 @@ function analyticsModel:storeObject( class, data )
 				print( event.response.createdAt )
 			end
 		end
-		print( "sending create request")
 		parse:createObject( class, data, onCreateObject )
 end
 

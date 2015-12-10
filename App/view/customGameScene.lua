@@ -58,19 +58,37 @@ function scene:create( event )
 	backButtonGroup:insert( backButton )
 	sceneGroup:insert( backButtonGroup )
 
+	playButton = display.newImageRect( "img/playCustom.png", 100, 50 )
+	playButton:setFillColor( unpack( settings.getButtonOffColor() ) )
+	playButton.x = display.contentCenterX
+	playButton.y = display.contentHeight/3 + 100
+
+	local leaderSpot = session.getLeaderboardPlace()
+	local leaderTextOptions =
+	{
+		text = "You currently have more leaderboard points than " .. leaderSpot .. "% of other players! Place in the top 50% to create your own levels!",
+		x = display.contentCenterX,
+		y = display.contentHeight/3,
+		width = display.contentWidth - 50,
+		fontSize = 20,
+		align = "center"
+	}
+	local leaderText = display.newText( leaderTextOptions )
+	leaderText:setFillColor( 0, 0, 0 )
+	sceneGroup:insert( leaderText )
+
 	createButton = display.newImageRect( "img/create.png", 100, 50 )
 	createButton:setFillColor( unpack( settings.getButtonOffColor() ) )
 	createButton.x = display.contentCenterX
-	createButton.y = display.contentCenterY - 50
+	createButton.y = display.contentHeight*3/4
 
 	createButtonGroup = display.newGroup()
 	createButtonGroup:insert( createButton )
 	sceneGroup:insert( createButtonGroup )
 
-	playButton = display.newImageRect( "img/playCustom.png", 100, 50 )
-	playButton:setFillColor( unpack( settings.getButtonOffColor() ) )
-	playButton.x = display.contentCenterX
-	playButton.y = display.contentCenterY + 50
+	if leaderSpot <= 50 then
+		createButton.alpha = 0
+	end
 
 	playButtonGroup = display.newGroup()
 	playButtonGroup:insert( playButton )

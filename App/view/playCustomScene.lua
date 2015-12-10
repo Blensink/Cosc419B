@@ -211,7 +211,6 @@ function scene:show( event )
 
 				endTime = os.time()
 				local level = session.level()
-				analytics:puzzleFinished( level, startTime, endTime )
 
 				local timeElapsed = endTime - startTime
 				if timeElapsed < maxGameTime/3 then
@@ -222,7 +221,8 @@ function scene:show( event )
 					pointsEarned = 1
 				end
 
-				print( "points earned: ", pointsEarned, timeElapsed, maxGameTime )
+				analytics:puzzleFinished( level, timeElapsed, pointsEarned )
+
 				local puzzleDoneOptions = 
 				{
 					params = 

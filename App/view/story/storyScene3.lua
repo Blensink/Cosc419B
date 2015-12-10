@@ -93,6 +93,8 @@ function scene:show( event )
 		displayGroup:insert( homeButtonGroup )
 
 		sceneGroup:insert( displayGroup )
+
+		sessionModel:setStoryDone()
 	--------------------------------------------------
 	-- Immediately after the scene has moved onscreen.
 	--------------------------------------------------

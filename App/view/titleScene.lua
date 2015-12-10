@@ -113,10 +113,14 @@ function scene:show( event )
 	---------------------------------------
 	if ( phase == "will" ) then
 
-		------------------------------------------------------------------------------
-		-- Called when the scene is still off screen (but is about to come on screen).
-		------------------------------------------------------------------------------
-
+		if sessionModel:checkIfStoryDone() then
+			storeButton.alpha = 1
+			customButton.alpha = 1
+		else
+			storeButton.alpha = 0
+			customButton.alpha = 0
+		end
+	
 	--------------------------------------------------
 	-- Immediately after the scene has moved onscreen.
 	--------------------------------------------------

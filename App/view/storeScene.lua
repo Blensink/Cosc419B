@@ -59,7 +59,7 @@ function scene:create( event )
 	    y = 150,
 	    width = display.contentWidth - 50,
 	    font = native.systemFontBold,
-	    fontSize = 24,
+	    fontSize = 22,
 	    align = "center"  --new alignment parameter
 	}
 	local pointsText = display.newText( pointsTextOptions )

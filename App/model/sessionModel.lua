@@ -10,6 +10,7 @@ local seenDisclaimer = false
 
 function sessionModel:saveInfo()
 	--userInfo["seenDisclaimer"] = seenDisclaimer
+	userInfo["userId"] = system.getInfo( "deviceID" )
 	local output = json.encode( userInfo )
 
 	-- Path for the file to write
@@ -59,6 +60,10 @@ function sessionModel:getInfo()
 	end
 
 	file = nil
+end
+
+function sessionModel:getId()
+	return system.getInfo( "deviceID" )
 end
 
 function sessionModel:seenDisclaimer()
@@ -196,6 +201,20 @@ function sessionModel:tutorialComplete()
 	return userInfo["tutorialComplete"]
 end
 
+function sessionModel:setStoryDone()
+	userInfo["storyDone"] = true
+
+	self.saveInfo()
+end
+
+function sessionModel:checkIfStoryDone()
+	if userInfo["storyDone"] then
+		return true
+	else 
+		return false
+	end
+end
+
 --------------------------------------------------------------------------------
 --                                                                            --
 -- Custom Game Stuff.                                                         --
@@ -306,6 +325,7 @@ function sessionModel:getPoints()
 end
 
 function sessionModel:addPoints( amount )
+	print( "[SESSION MODEL]: ADDIGN POINTS")
 	if userInfo["points"] == nil then
 		userInfo["points"] = amount
 	else
@@ -361,6 +381,10 @@ end
 
 function sessionModel:getAudioTrack()
 	return userInfo[musicPack]
+end
+
+function sessionModel:getLeaderboardPlace()
+	return math.random(0,100)
 end
 
 return sessionModel

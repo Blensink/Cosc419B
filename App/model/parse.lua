@@ -799,11 +799,9 @@ end
 
 function Parse:sendRequest( uri, requestParamsTbl, requestType, action, _callback, masterKey )
   local requestParams = self:buildRequestParams( requestParamsTbl, masterKey )
-print( "KASJDFKJASDFKLJASDLFKJHASELKJFALSKDNAEIJVSLKAGJE")
   requestType = requestType or Parse.NIL
   action = action or Parse.POST
   for k,v in pairs( requestParams ) do
-    print( "\t\tdebug", k,v )
   end
   local q = {
     requestId = network.request( uri, action, function(e) Parse:onResponse(e); end, requestParams ),

@@ -313,7 +313,7 @@ function scene:goHome()
 end
 
 function scene:restart()
-	composer.gotoScene( "view.gameScene")
+	composer.gotoScene( "view.story.gameScene")
 end
 
 function scene:gotoTutorial()
