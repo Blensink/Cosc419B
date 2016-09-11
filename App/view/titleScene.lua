@@ -22,15 +22,15 @@ local creditsButton
 local customButton
 local storeButton
 
----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
----------------------------------------------------------------------------------
-
+----------------------------------------------------------------------------------------------------
 -- local forward references should go here
----------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
 --- Composer functions.
 -- Standard event handlers that are called by the Composer API when changing scenes.
@@ -41,7 +41,8 @@ local storeButton
 function scene:create( event )
 	local sceneGroup = self.view
 
-	local background = display.newImageRect( "img/questionBackground.png", display.contentHeight, display.contentHeight )
+	local background = display.newImageRect( "img/questionBackground.png", display.contentHeight,
+    display.contentHeight )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
 	background.alpha = 0.25
@@ -120,7 +121,7 @@ function scene:show( event )
 			storeButton.alpha = 0
 			customButton.alpha = 0
 		end
-	
+
 	--------------------------------------------------
 	-- Immediately after the scene has moved onscreen.
 	--------------------------------------------------
@@ -139,7 +140,6 @@ function scene:show( event )
 			elseif phase == "ended" then
 				storyButton:setFillColor( unpack( settings.getButtonOffColor() ) )
 				local level = sessionModel.level()
-				print( "[TitleScene] Loading level:", sessionModel.level())
 				composer.gotoScene( "view.story.storyScene" .. level )
 			end
 		end
@@ -197,7 +197,7 @@ function scene:show( event )
 		-- Last things last begin the music TODO: RESUME MUSIC
 		-- local audio = settings.getAudioTrack()
 		-- if audio ~= nil then
-		-- 	local backgroundMusic = audio.loadStream( "sound/elevatormusic1.wav")
+		-- 	local backgroundMusic = audio.loadStream( "sound/elevatormusic1.wav" )
 		-- 	local backgroundMusicPlaying = audio.play( backgroundMusic, { loops = -1, fadein = 1000 } )
 		-- end
 

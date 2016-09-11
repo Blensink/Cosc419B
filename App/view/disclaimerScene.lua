@@ -12,6 +12,7 @@ local strings = require("constants.strings")
 
 local disclaimerButtonGroup
 local disclaimerButton
+
 ----------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
