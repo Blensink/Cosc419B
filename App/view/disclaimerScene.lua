@@ -1,6 +1,6 @@
 --- Disclaimer Scene.
 -- @scene Disclaimer Scene
--- This will only show the first time a user opens the app, and will require 
+-- This will only show the first time a user opens the app, and will require
 -- the user to consent to information being gathered about them for educational
 -- purposes.
 
@@ -8,18 +8,19 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 local sessionModel = require( "model.sessionModel" )
 local settings = require( "model.settingsModel" )
+local strings = require("constants.strings")
 
 local disclaimerButtonGroup
 local disclaimerButton
----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
----------------------------------------------------------------------------------
-
+----------------------------------------------------------------------------------------------------
 -- local forward references should go here
----------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
 --- Composer functions.
 -- Standard event handlers that are called by the Composer API when changing scenes.
@@ -30,22 +31,22 @@ local disclaimerButton
 function scene:create( event )
 	local sceneGroup = self.view
 
-	local background = display.newImageRect( "img/questionBackground.png", display.contentHeight, display.contentHeight )
+	local background = display.newImageRect( "img/questionBackground.png",
+    display.contentHeight, display.contentHeight )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
 	background.alpha = 0.25
 	sceneGroup:insert( background )
 
-	local disclaimerTextOptions = 
+	local disclaimerTextOptions =
 	{
-	    --parent = textGroup,
-	    text = "We're going to save some data about your gameplay for educational purposes.",     
+	    text = strings.disclaimer,
 	    x = display.contentCenterX,
 	    y = display.contentCenterY,
 	    width = display.contentWidth - 50,
-	    font = native.systemFontBold,   
+	    font = native.systemFontBold,
 	    fontSize = 24,
-	    align = "center"  --new alignment parameter
+	    align = "center"
 	}
 
 	local disclaimerText = display.newText( disclaimerTextOptions )
@@ -61,7 +62,7 @@ function scene:create( event )
 	disclaimerButtonGroup:insert( disclaimerButton )
 
 	sceneGroup:insert( disclaimerText )
-	sceneGroup:insert( disclaimerButtonGroup ) 
+	sceneGroup:insert( disclaimerButtonGroup )
 end
 
 --- Called twice, once BEFORE, and once immediately after scene has moved onscreen.
@@ -78,7 +79,6 @@ function scene:show( event )
 		------------------------------------------------------------------------------
 		-- Called when the scene is still off screen (but is about to come on screen).
 		------------------------------------------------------------------------------
-
 		local function disclaimerPressed( event)
 			local phase = event.phase
 
@@ -97,8 +97,6 @@ function scene:show( event )
 		-- Load in our session model, and all the info that comes with it.
 		-- Check if they've already said yes to this, if so just skip all this business
 		sessionModel.getInfo()
-
-		print( "[DisclaimerScene] User has seen disclaimer:", sessionModel.hasSeenDisclaimer() )
 		if sessionModel.hasSeenDisclaimer() then
 			composer.gotoScene( "view.titleScene" )
 		end
@@ -162,12 +160,13 @@ function scene:destroy( event )
 end
 
 --- Custom functions.
--- Custom functions that provide additional functionality and are called from this Scene or its associated controller.
+-- Custom functions that provide additional functionality and are called from this Scene or its
+-- associated controller.
 -- @section custom
 
----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 -- END OF YOUR IMPLEMENTATION
----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
 -- Listener setup
 scene:addEventListener( "create", scene )
