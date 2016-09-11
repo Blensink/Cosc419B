@@ -7,6 +7,7 @@ local scene = composer.newScene()
 
 local session = require( "model.sessionModel" )
 local settings = require( "model.settingsModel" )
+local strings = require( "constants.strings" )
 
 local backButton
 local buyButton = nil
@@ -19,7 +20,6 @@ local item
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
-
 -- local forward references should go here
 
 ---------------------------------------------------------------------------------
@@ -37,12 +37,14 @@ function scene:create( event )
 	local params = event.params
 	item = params.object
 
-	local background = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight )
+	local background = display.newRect( display.contentCenterX, display.contentCenterY,
+   display.contentWidth, display.contentHeight )
 	background:setFillColor( { 0, 0, 0} )
 	background.alpha = 0.3
 	sceneGroup:insert( background )
 
-	local backgroundRect = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth - 50, display.contentHeight/2 )
+	local backgroundRect = display.newRect( display.contentCenterX, display.contentCenterY,
+    display.contentWidth - 50, display.contentHeight/2 )
 	background:setFillColor( { 1, 1, 1 } )
 	sceneGroup:insert( backgroundRect )
 
@@ -53,7 +55,7 @@ function scene:create( event )
 
 	local textOptions =
 	{
-		text = "Are you sure you want to buy " .. string.lower( item.name ),
+		text = strings.areYouSure .. string.lower( item.name ),
 		x = display.contentCenterX,
 		y = display.contentCenterY,
 		width = backgroundRect.width - 10,
@@ -81,7 +83,7 @@ function scene:create( event )
 
 	local descriptionOptions =
 	{
-		text = "It's going to cost you " .. item.cost .. " points.",
+		text = strings.description1 .. item.cost .. this.description2,
 		x = display.contentCenterX,
 		y = display.contentCenterY,
 		width = backgroundRect.width - 10,
@@ -123,7 +125,6 @@ function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
 	local parent = event.parent
-
 	---------------------------------------
 	-- BEFORE the scene has moved onscreen.
 	---------------------------------------
@@ -166,7 +167,7 @@ function scene:show( event )
 
 						local errorTextOptions =
 						{
-							text = "You don't have enough points for this! Come back when you have more.",
+							text = strings.error,
 							x = display.contentCenterX,
 							y = display.contentCenterY,
 							width = display.contentWidth - 50,
@@ -182,7 +183,7 @@ function scene:show( event )
 
 					local errorTextOptions =
 					{
-						text = "You don't have enough points for this! Come back when you have more.",
+						text = strings.error,
 						x = display.contentCenterX,
 						y = display.contentCenterY,
 						width = display.contentWidth - 50,
@@ -215,7 +216,6 @@ function scene:show( event )
 	-- Immediately after the scene has moved onscreen.
 	--------------------------------------------------
 	elseif ( phase == "did" ) then
-
 	end
 end
 
@@ -224,12 +224,10 @@ end
 function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	----------------------------------------------
 	-- When the screen is about to move offscreen.
 	----------------------------------------------
 	if ( phase == "will" ) then
-
 	------------------------------------------------
 	-- When the scene has finished moving offscreen.
 	------------------------------------------------
@@ -248,7 +246,6 @@ end
 -- @tparam event event Event fired by the composer API.
 function scene:destroy( event )
 	local sceneGroup = self.view
-
 	-----------------------------------------------------------------------------
 	-- Called prior to the removal of scene's view ("sceneGroup").
 	-- Insert code here to clean up the scene.

@@ -24,7 +24,6 @@ local objectOriginY = display.contentHeight/4
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
-
 -- local forward references should go here
 
 ---------------------------------------------------------------------------------
@@ -39,7 +38,6 @@ local objectOriginY = display.contentHeight/4
 -- @tparam event event Event fired by the composer API.
 function scene:create( event )
 	local sceneGroup = self.view
-
 end
 
 --- Called twice, once BEFORE, and once immediately after scene has moved onscreen.
@@ -55,7 +53,8 @@ function scene:show( event )
 		startTime = os.time()
 		analytics.init()
 
-		local backgroundImage = display.newImageRect( "img/questionBackground.png", display.contentHeight, display.contentHeight )
+		local backgroundImage = display.newImageRect( "img/questionBackground.png",
+      display.contentHeight, display.contentHeight )
 		backgroundImage.x = display.contentCenterX
 		backgroundImage.y = display.contentCenterY
 		backgroundImage.alpha = 0.2
@@ -79,7 +78,7 @@ function scene:show( event )
 		sceneGroup:insert( doneButton )
 
 		gameTimer = gameTime:new
-		{ 
+		{
 			timerGroup = display.newGroup(),
 			maxTime = maxGameTime,
 			width = 30,
@@ -89,16 +88,10 @@ function scene:show( event )
 		}
 		sceneGroup:insert( gameTimer.timerGroup )
 
-		gameTimer.start( function() 
-					local puzzleDoneOptions = 
-					{
-						params = 
-						{
-							status = 0
-						}
-					}
+		gameTimer.start( function()
+					local puzzleDoneOptions = { params = {status = 0} }
 					composer.showOverlay( "view.puzzleDoneOverlay", puzzleDoneOptions )
-			end 
+			end
 		)
 
 		-- Get our current level from the session model, then get that level from the level file.
@@ -112,7 +105,8 @@ function scene:show( event )
 			local xModifier = (key-1)%4
 			local yModifier = math.floor( (key-1)/4 )
 
-			local newObject = object:new( { imgName = "img/"..objectImage..".png", width = 50, height = 50, answer = puzzleAnswer, group = display.newGroup() } )
+			local newObject = object:new( { imgName = "img/"..objectImage..".png", width = 50,
+        height = 50, answer = puzzleAnswer, group = display.newGroup() } )
 			newObject.group.x = objectOriginX + 60*xModifier
 			newObject.group.y = objectOriginY + 60*yModifier
 
@@ -140,7 +134,7 @@ function scene:show( event )
 					if not( event.target == group ) then
 						object.group:removeEventListener( "touch", objectTouched )
 					end
-				end		
+				end
 			elseif phase == "moved" then
 				target.x = event.x
 				target.y = event.y
@@ -152,7 +146,7 @@ function scene:show( event )
 					if not( event.target == group ) then
 						object.group:addEventListener( "touch", objectTouched )
 					end
-				end		
+				end
 			end
 		end
 
@@ -177,8 +171,10 @@ function scene:show( event )
 				local area1Answer
 				local area2Answer
 				for key, object in pairs( objectTable ) do
-					-- Decide which array the first element is to check the rest against. This means they're in area 1.
-					if ( math.abs( object.group.x - array1Area.x ) < array1Area.width/2 and math.abs( object.group.y - array1Area.y ) < array1Area.height/2 ) then
+					-- Decide which array the first element is to check the rest against.
+          -- This means they're in area 1.
+					if ( math.abs( object.group.x - array1Area.x ) < array1Area.width/2 and
+              math.abs( object.group.y - array1Area.y ) < array1Area.height/2 ) then
 						if area1Answer == nil then
 							area1Answer = object.answer
 						elseif not(area1Answer == object.answer) then
@@ -188,7 +184,8 @@ function scene:show( event )
 						end
 
 					-- This means they're in area 2.
-					elseif ( math.abs( object.group.x - array2Area.x ) < array2Area.width/2 and ( math.abs( object.group.y - array2Area.y ) < array2Area.height/2 ) )  then
+					elseif ( math.abs( object.group.x - array2Area.x ) < array2Area.width/2 and
+              ( math.abs( object.group.y - array2Area.y ) < array2Area.height/2 ) )  then
 						if area2Answer == nil then
 							area2Answer = object.answer
 						elseif not(area2Answer == object.answer) then
@@ -223,9 +220,9 @@ function scene:show( event )
 
 				analytics:puzzleFinished( level, timeElapsed, pointsEarned )
 
-				local puzzleDoneOptions = 
+				local puzzleDoneOptions =
 				{
-					params = 
+					params =
 					{
 						status = puzzleCorrect,
 						puzzleType = "custom",
@@ -234,13 +231,9 @@ function scene:show( event )
 					}
 				}
 				composer.showOverlay( "view.puzzleDoneOverlay", puzzleDoneOptions )
-				print( "[GameScene] Puzzle Status: ", puzzleCorrect)
-
 			end
 		end
-
 		doneButton:addEventListener( "touch", doneTouched)
-		
 	end
 end
 
@@ -249,17 +242,14 @@ end
 function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	----------------------------------------------
 	-- When the screen is about to move offscreen.
 	----------------------------------------------
 	if ( phase == "will" ) then
-
 	------------------------------------------------
 	-- When the scene has finished moving offscreen.
 	------------------------------------------------
 	elseif ( phase == "did" ) then
-
 		for key, object in pairs( objectTable ) do
 			object.group:removeEventListener( "touch", objectTouched )
 		end
@@ -270,13 +260,11 @@ end
 -- @tparam event event Event fired by the composer API.
 function scene:destroy( event )
 	local sceneGroup = self.view
-
 	-----------------------------------------------------------------------------
 	-- Called prior to the removal of scene's view ("sceneGroup").
 	-- Insert code here to clean up the scene.
 	-- Example: remove display objects, save state, etc.
 	-----------------------------------------------------------------------------
-
 end
 
 --- Custom functions.
@@ -307,7 +295,6 @@ end
 ---------------------------------------------------------------------------------
 -- END OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
-
 -- Listener setup
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )

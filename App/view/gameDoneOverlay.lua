@@ -15,7 +15,6 @@ local homeButton
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
-
 -- local forward references should go here
 
 ---------------------------------------------------------------------------------
@@ -30,18 +29,18 @@ local homeButton
 -- @tparam event event Event fired by the composer API.
 function scene:create( event )
 	local sceneGroup = self.view
-	print( "[COMPOSER]: Creating template" )
-
 	-----------------------------------------------------------------------------
 	-- Initialize the scene here.
 	-- Example: add display objects to "sceneGroup", add touch listeners, etc.
 	-----------------------------------------------------------------------------
 
-	local background = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight )
+	local background = display.newRect( display.contentCenterX, display.contentCenterY,
+    display.contentWidth, display.contentHeight )
 	background:setFillColor( { 0, 0, 0} )
 	background.alpha = 0.3
 
-	local backgroundRect = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth - 50, display.contentHeight/3 )
+	local backgroundRect = display.newRect( display.contentCenterX, display.contentCenterY,
+    display.contentWidth - 50, display.contentHeight/3 )
 	background:setFillColor( { 1, 1, 1 } )
 
 	local gameText = display.newImageRect( "img/gameOver.png", 200, 100 )
@@ -77,23 +76,17 @@ function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
 	local parent = event.parent
-
 	---------------------------------------
 	-- BEFORE the scene has moved onscreen.
 	---------------------------------------
 	if ( phase == "will" ) then
-		print( "[COMPOSER]: Will show template" )
-
 		------------------------------------------------------------------------------
 		-- Called when the scene is still off screen (but is about to come on screen).
 		------------------------------------------------------------------------------
-
 	--------------------------------------------------
 	-- Immediately after the scene has moved onscreen.
 	--------------------------------------------------
 	elseif ( phase == "did" ) then
-		print( "[COMPOSER]: Did show template" )
-
 		-----------------------------------------------------------------------------
 		-- Called when the scene is now on screen.
 		-- Insert code here to make the scene come alive.
@@ -101,8 +94,7 @@ function scene:show( event )
 		-----------------------------------------------------------------------------
 		function homePressed( event )
 			local phase = event.phase
-
-			homeButton:setFillColor( unpack( settings.getButtonOnColor() ) )	
+			homeButton:setFillColor( unpack( settings.getButtonOnColor() ) )
 
 			if phase == "began" then
 			elseif phase == "ended" then
@@ -113,8 +105,7 @@ function scene:show( event )
 
 		function againPressed( event )
 			local phase = event.phase
-
-			againButton:setFillColor( unpack( settings.getButtonOnColor() ) )	
+			againButton:setFillColor( unpack( settings.getButtonOnColor() ) )
 
 			if phase == "began" then
 			elseif phase == "ended" then
@@ -132,24 +123,19 @@ end
 function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	----------------------------------------------
 	-- When the screen is about to move offscreen.
 	----------------------------------------------
 	if ( phase == "will" ) then
-
 		homeButtonGroup:removeEventListener( "touch", homePressed )
 		againButtonGroup:removeEventListener( "touch", againPressed )
-
 	------------------------------------------------
 	-- When the scene has finished moving offscreen.
 	------------------------------------------------
 	elseif ( phase == "did" ) then
-
 		-----------------------------------------------------------------------------
 		-- Called immediately after scene goes off screen.
 		-----------------------------------------------------------------------------
-
 	end
 end
 
@@ -157,7 +143,6 @@ end
 -- @tparam event event Event fired by the composer API.
 function scene:destroy( event )
 	local sceneGroup = self.view
-
 	-----------------------------------------------------------------------------
 	-- Called prior to the removal of scene's view ("sceneGroup").
 	-- Insert code here to clean up the scene.

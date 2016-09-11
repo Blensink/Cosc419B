@@ -27,9 +27,9 @@ local backButton
 -- @tparam event event Event fired by the composer API.
 function scene:create( event )
 	local sceneGroup = self.view
-	print( "[COMPOSER]: Creating template" )
 
-	local background = display.newImageRect( "img/questionBackground.png", display.contentHeight, display.contentHeight )
+	local background = display.newImageRect( "img/questionBackground.png", display.contentHeight,
+    display.contentHeight )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
 	background.alpha = 0.25
@@ -39,15 +39,18 @@ function scene:create( event )
 	-- Initialize the scene here.
 	-- Example: add display objects to "sceneGroup", add touch listeners, etc.
 	-----------------------------------------------------------------------------
-
-	local creditsTextOptions = 
+	local creditsTextOptions =
 	{
 	    --parent = textGroup,
-	    text = "Game Design: Brendan Lensink \n	Art: Brendan Lensink \n	Sound Design: Brendan Lensink \n Puzzle Design: Brendan Lensink \n Sound Effects: Jessica Weeres",     
+	    text = "Game Design: Brendan Lensink \n
+      	Art: Brendan Lensink \n
+        Sound Design: Brendan Lensink \n
+        Puzzle Design: Brendan Lensink \n
+        Sound Effects: Jessica Weeres",
 	    x = display.contentCenterX,
 	    y = display.contentCenterY,
 	    width = display.contentWidth - 50,
-	    font = native.systemFontBold,   
+	    font = native.systemFontBold,
 	    fontSize = 18,
 	    align = "center"  --new alignment parameter
 	}
@@ -64,7 +67,7 @@ function scene:create( event )
 	backButtonGroup:insert( backButton )
 
 	sceneGroup:insert( creditsText )
-	sceneGroup:insert( backButtonGroup ) 
+	sceneGroup:insert( backButtonGroup )
 end
 
 --- Called twice, once BEFORE, and once immediately after scene has moved onscreen.
@@ -72,40 +75,31 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	---------------------------------------
 	-- BEFORE the scene has moved onscreen.
 	---------------------------------------
 	if ( phase == "will" ) then
-		print( "[COMPOSER]: Will show template" )
-
 		------------------------------------------------------------------------------
 		-- Called when the scene is still off screen (but is about to come on screen).
 		------------------------------------------------------------------------------
-
 		local function backPressed( event)
 			local phase = event.phase
 				backButton:setFillColor( unpack(settings.getButtonOnColor() ) )
 			if phase == "ended" then
-				backButton:setFillColor( unpack(settings.getButtonOffColor() ) )				
+				backButton:setFillColor( unpack(settings.getButtonOffColor() ) )
 				composer.gotoScene( "view.titleScene" )
 			end
 		end
-
 		backButtonGroup:addEventListener( "touch", backPressed )
-
 	--------------------------------------------------
 	-- Immediately after the scene has moved onscreen.
 	--------------------------------------------------
 	elseif ( phase == "did" ) then
-		print( "[COMPOSER]: Did show template" )
-
 		-----------------------------------------------------------------------------
 		-- Called when the scene is now on screen.
 		-- Insert code here to make the scene come alive.
 		-- Example: start timers, begin animation, play audio, etc.
 		-----------------------------------------------------------------------------
-
 	end
 end
 
@@ -114,29 +108,22 @@ end
 function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	----------------------------------------------
 	-- When the screen is about to move offscreen.
 	----------------------------------------------
 	if ( phase == "will" ) then
-		print( "[COMPOSER]: Will hide template" )
-
 		-----------------------------------------------------------------------------
 		-- Called when the scene is on screen (but is about to go off screen).
 		-- Insert code here to "pause" the scene.
 		-- Example: stop timers, stop animation, stop audio, etc.
 		-----------------------------------------------------------------------------
-
 	------------------------------------------------
 	-- When the scene has finished moving offscreen.
 	------------------------------------------------
 	elseif ( phase == "did" ) then
-		print( "[COMPOSER]: Did hide template" )
-
 		-----------------------------------------------------------------------------
 		-- Called immediately after scene goes off screen.
 		-----------------------------------------------------------------------------
-
 	end
 end
 
@@ -144,16 +131,12 @@ end
 -- @tparam event event Event fired by the composer API.
 function scene:destroy( event )
 	local sceneGroup = self.view
-	print( "[COMPOSER]: Destroying template" )
-
 	-----------------------------------------------------------------------------
 	-- Called prior to the removal of scene's view ("sceneGroup").
 	-- Insert code here to clean up the scene.
 	-- Example: remove display objects, save state, etc.
 	-----------------------------------------------------------------------------
-
 	backButtonGroup:removeEventListener( "touch", backPressed )
-
 end
 
 --- Custom functions.

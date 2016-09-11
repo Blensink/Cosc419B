@@ -14,10 +14,10 @@ local settings = require( "model.settingsModel")
 local object = require( 'element.object' )
 
 local doneButtonGroup
-local backButtonGroup 
+local backButtonGroup
 
 local doneButton
-local backButton 
+local backButton
 
 local iconArea
 local leftArrow
@@ -60,7 +60,8 @@ function scene:show( event )
 	---------------------------------------
 	if ( phase == "will" ) then
 
-		local backgroundImage = display.newImageRect( "img/questionBackground.png", display.contentHeight, display.contentHeight )
+		local backgroundImage = display.newImageRect( "img/questionBackground.png",
+      display.contentHeight, display.contentHeight )
 		backgroundImage.x = display.contentCenterX
 		backgroundImage.y = display.contentCenterY
 		backgroundImage.alpha = 0.2
@@ -96,7 +97,8 @@ function scene:show( event )
 		sceneGroup:insert( array2Area )
 
 		-- Create the icon area
-		iconArea = display.newRect( display.contentCenterX, display.contentCenterY - 100, display.contentWidth - 50, 200 )
+		iconArea = display.newRect( display.contentCenterX, display.contentCenterY - 100,
+      display.contentWidth - 50, 200 )
 		iconArea:setFillColor( 0.5, 0.5, 0.5 )
 		iconArea.alpha = 0.3
 		sceneGroup:insert( iconArea )
@@ -146,11 +148,12 @@ function scene:show( event )
 				row = 0
 			elseif yPos >= 4 and yPos <= 8 then
 				row = 1
-			else 
+			else
 				row = 2
 			end
 
-			local newObject = object:new( { imgName = "img/"..path, width = 50, height = 50, answer = "1", group = display.newGroup() } )
+			local newObject = object:new( { imgName = "img/"..path, width = 50, height = 50,
+        answer = "1", group = display.newGroup() } )
 			newObject.group.x = xOrigin + 65*( xPos-1 )
 			newObject.group.y = yOrigin + 65*row
 			table.insert( pageTable[pageIndex], newObject.group )
@@ -283,7 +286,7 @@ function scene:show( event )
 					if not( event.target == group ) then
 						object.group:removeEventListener( "touch", objectTouched )
 					end
-				end	
+				end
 
 				leftArrow:removeEventListener( "touch", leftArrowPressed )
 				rightArrow:removeEventListener( "touch", rightArrowPressed )
@@ -298,10 +301,10 @@ function scene:show( event )
 					if not( event.target == group ) then
 						object.group:addEventListener( "touch", objectTouched )
 					end
-				end	
+				end
 
 				leftArrow:addEventListener( "touch", leftArrowPressed )
-				rightArrow:addEventListener( "touch", rightArrowPressed )	
+				rightArrow:addEventListener( "touch", rightArrowPressed )
 
 				-- If the button press ends and the button is outside of the starting area,
 				--	remove it from the page group so it doesn't disappear on page change.
@@ -312,7 +315,7 @@ function scene:show( event )
 						end
 
 					end
-				end 
+				end
 			end
 		end
 
@@ -374,11 +377,12 @@ end
 -- @section custom
 
 function scene:objectInArea( group, area )
-	if ( math.abs( group.x - area.x ) < area.width/2 and math.abs( group.y - area.y ) < area.height/2 ) then
+	if ( math.abs( group.x - area.x ) < area.width/2 and
+      math.abs( group.y - area.y ) < area.height/2 ) then
 		return true
 	else
 		return false
-	end			
+	end
 end
 
 ---------------------------------------------------------------------------------

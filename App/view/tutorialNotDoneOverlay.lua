@@ -28,18 +28,17 @@ local overlayGroup = display.newGroup()
 -- @tparam event event Event fired by the composer API.
 function scene:create( event )
 	local sceneGroup = self.view
-	print( "[COMPOSER]: Creating template" )
-
 	-----------------------------------------------------------------------------
 	-- Initialize the scene here.
 	-- Example: add display objects to "sceneGroup", add touch listeners, etc.
 	-----------------------------------------------------------------------------
-
-	local background = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight )
+	local background = display.newRect( display.contentCenterX, display.contentCenterY,
+    display.contentWidth, display.contentHeight )
 	background:setFillColor( { 0, 0, 0} )
 	background.alpha = 0.3
 
-	local backgroundRect = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth - 50, display.contentHeight/3 )
+	local backgroundRect = display.newRect( display.contentCenterX, display.contentCenterY,
+    display.contentWidth - 50, display.contentHeight/3 )
 	background:setFillColor( { 1, 1, 1 } )
 
 	local gameText = display.newImageRect( "img/tutorialNotDone.png", 250, 125 )
@@ -47,7 +46,7 @@ function scene:create( event )
 	gameText.y = backgroundRect.y - backgroundRect.height/2 + gameText.height/2
 
 	local skipButton = display.newImageRect( "img/skip.png", 100, 50 )
-	skipButton.x = backgroundRect.x/2  
+	skipButton.x = backgroundRect.x/2
 	skipButton.y = backgroundRect.y + backgroundRect.height/2 - skipButton.height/2
 	skipButtonGroup = display.newGroup()
 	skipButtonGroup:insert( skipButton )
@@ -73,23 +72,17 @@ function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
 	local parent = event.parent
-
 	---------------------------------------
 	-- BEFORE the scene has moved onscreen.
 	---------------------------------------
 	if ( phase == "will" ) then
-		print( "[COMPOSER]: Will show template" )
-
 		------------------------------------------------------------------------------
 		-- Called when the scene is still off screen (but is about to come on screen).
 		------------------------------------------------------------------------------
-
 	--------------------------------------------------
 	-- Immediately after the scene has moved onscreen.
 	--------------------------------------------------
 	elseif ( phase == "did" ) then
-		print( "[COMPOSER]: Did show template" )
-
 		-----------------------------------------------------------------------------
 		-- Called when the scene is now on screen.
 		-- Insert code here to make the scene come alive.
@@ -128,21 +121,15 @@ function scene:hide( event )
 	-- When the screen is about to move offscreen.
 	----------------------------------------------
 	if ( phase == "will" ) then
-		print( "[COMPOSER]: Will hide template" )
-
 		gotoTutorialButtonGroup:removeEventListener( "touch", tutorialPressed )
 		skipButtonGroup:removeEventListener( "touch", skipPressed )
-
 	------------------------------------------------
 	-- When the scene has finished moving offscreen.
 	------------------------------------------------
 	elseif ( phase == "did" ) then
-		print( "[COMPOSER]: Did hide template" )
-
 		-----------------------------------------------------------------------------
 		-- Called immediately after scene goes off screen.
 		-----------------------------------------------------------------------------
-
 	end
 end
 
@@ -150,8 +137,6 @@ end
 -- @tparam event event Event fired by the composer API.
 function scene:destroy( event )
 	local sceneGroup = self.view
-	print( "[COMPOSER]: Destroying template" )
-
 	-----------------------------------------------------------------------------
 	-- Called prior to the removal of scene's view ("sceneGroup").
 	-- Insert code here to clean up the scene.

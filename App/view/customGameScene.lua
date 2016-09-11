@@ -8,6 +8,7 @@ local scene = composer.newScene()
 local session = require( "model.sessionModel" )
 local analytics = require( "model.analyticsModel" )
 local settings = require( "model.settingsModel" )
+local strings = require("constants.strings")
 
 local backButtonGroup
 local createButtonGroup
@@ -21,7 +22,6 @@ local playButton
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
-
 -- local forward references should go here
 
 ---------------------------------------------------------------------------------
@@ -41,9 +41,8 @@ function scene:create( event )
 	-- Initialize the scene here.
 	-- Example: add display objects to "sceneGroup", add touch listeners, etc.
 	-----------------------------------------------------------------------------
-	-- analytics:init()
-
-	local background = display.newImageRect( "img/questionBackground.png", display.contentHeight, display.contentHeight )
+	local background = display.newImageRect( "img/questionBackground.png", display.contentHeight,
+    display.contentHeight )
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
 	background.alpha = 0.25
@@ -66,7 +65,7 @@ function scene:create( event )
 	local leaderSpot = session.getLeaderboardPlace()
 	local leaderTextOptions =
 	{
-		text = "You currently have more leaderboard points than " .. leaderSpot .. "% of other players! Place in the top 50% to create your own levels!",
+		text = strings.customGameLeaderBoard1 .. leaderSpot .. strings.customGameLeaderBoard2,
 		x = display.contentCenterX,
 		y = display.contentHeight/3,
 		width = display.contentWidth - 50,
@@ -100,12 +99,10 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	---------------------------------------
 	-- BEFORE the scene has moved onscreen.
 	---------------------------------------
 	if ( phase == "will" ) then
-
 	--------------------------------------------------
 	-- Immediately after the scene has moved onscreen.
 	--------------------------------------------------
@@ -155,12 +152,10 @@ end
 function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	----------------------------------------------
 	-- When the screen is about to move offscreen.
 	----------------------------------------------
 	if ( phase == "will" ) then
-
 		backButtonGroup:removeEventListener( "touch", backPressed )
 		createButtonGroup:removeEventListener( "touch", createPressed )
 		playButtonGroup:removeEventListener( "touch", playPressed )
@@ -168,7 +163,6 @@ function scene:hide( event )
 	-- When the scene has finished moving offscreen.
 	------------------------------------------------
 	elseif ( phase == "did" ) then
-
 	end
 end
 
@@ -176,13 +170,11 @@ end
 -- @tparam event event Event fired by the composer API.
 function scene:destroy( event )
 	local sceneGroup = self.view
-
 	-----------------------------------------------------------------------------
 	-- Called prior to the removal of scene's view ("sceneGroup").
 	-- Insert code here to clean up the scene.
 	-- Example: remove display objects, save state, etc.
 	-----------------------------------------------------------------------------
-
 end
 
 --- Custom functions.

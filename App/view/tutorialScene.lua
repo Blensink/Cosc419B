@@ -26,7 +26,6 @@ local objectTable = {}
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
-
 -- local forward references should go here
 
 ---------------------------------------------------------------------------------
@@ -41,7 +40,6 @@ local objectTable = {}
 -- @tparam event event Event fired by the composer API.
 function scene:create( event )
 	local sceneGroup = self.view
-
 	-----------------------------------------------------------------------------
 	-- Initialize the scene here.
 	-- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -54,12 +52,12 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	---------------------------------------
 	-- BEFORE the scene has moved onscreen.
 	---------------------------------------
 	if ( phase == "will" ) then
-		local background = display.newImageRect( "img/questionBackground.png", display.contentHeight, display.contentHeight )
+		local background = display.newImageRect( "img/questionBackground.png", display.contentHeight,
+      display.contentHeight )
 		background.x = display.contentCenterX
 		background.y = display.contentCenterY
 		background.alpha = 0.25
@@ -84,7 +82,7 @@ function scene:show( event )
 		sceneGroup:insert( doneButton )
 
 		gameTimer = gameTime:new
-		{ 
+		{
 			timerGroup = display.newGroup(),
 			maxTime = 5000,
 			width = 30,
@@ -94,23 +92,15 @@ function scene:show( event )
 		}
 		sceneGroup:insert( gameTimer.timerGroup )
 
-		gameTimer.start( function() 
-					local puzzleDoneOptions = 
-					{
-						params = 
-						{
-							status = 0
-						}
-					}
-					composer.showOverlay( "view.puzzleDoneOverlay", puzzleDoneOptions )
-			end 
-		)
+		gameTimer.start( function()
+			local puzzleDoneOptions =	{ params = { status = 0 } }
+			composer.showOverlay( "view.puzzleDoneOverlay", puzzleDoneOptions )
+		end )
 		transition.pause()
 
 		------------------------------------------------------------------------------
 		-- Called when the scene is still off screen (but is about to come on screen).
 		------------------------------------------------------------------------------
-
 		sessionModel.getInfo()
 		local levelInfo = sessionModel:getLevel("tutorial")
 
@@ -122,7 +112,8 @@ function scene:show( event )
 			local xModifier = (key-1)%4
 			local yModifier = math.floor( (key-1)/4 )
 
-			local newObject = object:new( { imgName = "img/"..objectImage..".png", width = 50, height = 50, answer = puzzleAnswer, group = display.newGroup() } )
+			local newObject = object:new( { imgName = "img/"..objectImage..".png", width = 50,
+        height = 50, answer = puzzleAnswer, group = display.newGroup() } )
 			newObject.group.x = objectOriginX + 60*xModifier
 			newObject.group.y = objectOriginY + 60*yModifier
 
@@ -152,7 +143,7 @@ function scene:show( event )
 					if not( event.target == group ) then
 						object.group:removeEventListener( "touch", objectTouched )
 					end
-				end		
+				end
 			elseif phase == "moved" then
 				target.x = event.x
 				target.y = event.y
@@ -164,7 +155,7 @@ function scene:show( event )
 					if not( event.target == group ) then
 						object.group:addEventListener( "touch", objectTouched )
 					end
-				end		
+				end
 			end
 		end
 
@@ -179,15 +170,17 @@ function scene:show( event )
 			local puzzleCorrect = 1
 
 			if phase == "began" then
-				doneButton:setFillColor( unpack( settings.getButtonOnColor() ) )				
+				doneButton:setFillColor( unpack( settings.getButtonOnColor() ) )
 			elseif phase == "ended" then
 				doneButton:setFillColor( unpack( settings.getButtonOffColor() ) )
 				-- First check if our answers are in the right boxes.
 				local area1Answer
 				local area2Answer
 				for key, object in pairs( objectTable ) do
-					-- Decide which array the first element is to check the rest against. This means they're in area 1.
-					if ( math.abs( object.group.x - array1Area.x ) < array1Area.width/2 and math.abs( object.group.y - array1Area.y ) < array1Area.height/2 ) then
+					-- Decide which array the first element is to check the rest against.
+          -- This means they're in area 1.
+					if ( math.abs( object.group.x - array1Area.x ) < array1Area.width/2 and
+              math.abs( object.group.y - array1Area.y ) < array1Area.height/2 ) then
 						if area1Answer == nil then
 							area1Answer = object.answer
 						elseif not(area1Answer == object.answer) then
@@ -197,7 +190,8 @@ function scene:show( event )
 						end
 
 					-- This means they're in area 2.
-					elseif ( math.abs( object.group.x - array2Area.x ) < array2Area.width/2 and ( math.abs( object.group.y - array2Area.y ) < array2Area.height/2 ) )  then
+					elseif ( math.abs( object.group.x - array2Area.x ) < array2Area.width/2 and
+              ( math.abs( object.group.y - array2Area.y ) < array2Area.height/2 ) )  then
 						if area2Answer == nil then
 							area2Answer = object.answer
 						elseif not(area2Answer == object.answer) then
@@ -218,9 +212,9 @@ function scene:show( event )
 				end
 
 				analytics.tutorialCompleted()
-				local puzzleDoneOptions = 
+				local puzzleDoneOptions =
 				{
-					params = 
+					params =
 					{
 						status = puzzleCorrect
 					}
@@ -231,7 +225,7 @@ function scene:show( event )
 
 		-- Log that the tutorial has been started
 		analytics:tutorialStarted()
-		
+
 		-- Now the tutorial stuff.
 		composer.showOverlay( "view.tutorial.overlay1")
 	end
@@ -262,7 +256,7 @@ function scene:hide( event )
 		for key, object in pairs( objectTable ) do
 			object.group:removeEventListener( "touch", objectTouched )
 		end
-		audio.stop()	
+		audio.stop()
 	end
 
 end
@@ -345,28 +339,29 @@ function scene:endTutorial()
 
 				transition.to( hand,
 					{
-						time = 1000, 
+						time = 1000,
 						x = display.contentWidth/4 + 15,
 						y = display.contentHeight - array1Area.height/2 + 10
 					}
 				)
 
-				transition.to( object1, 
+				transition.to( object1,
 					{
 						time = 1000,
 						x = display.contentWidth/4,
 						y = display.contentHeight - array1Area.height/2 - 10,
-						onComplete = function() 
+						onComplete = function()
 							object1.width = object1.width - 10
 							object1.height = object1.height - 10
 							finalSpeechBubble:removeSelf()
 
-							local finalFinalSpeechBubble = display.newImageRect( "img/speechBubble8.png", 250, 250 )
+							local finalFinalSpeechBubble =
+                display.newImageRect( "img/speechBubble8.png", 250, 250 )
 							finalFinalSpeechBubble.x = display.contentWidth - finalFinalSpeechBubble.width/2 + 50
 							finalFinalSpeechBubble.y = display.contentCenterY
 							sceneGroup:insert( finalFinalSpeechBubble )
 
-							timer.performWithDelay( 2000, function() 
+							timer.performWithDelay( 2000, function()
 								hand:removeSelf()
 								scientist:removeSelf()
 								finalFinalSpeechBubble:removeSelf()
@@ -379,8 +374,8 @@ function scene:endTutorial()
 
 							-- Last things last begin the music
 						local backgroundMusic = audio.loadStream( "sound/elevatormusic1.wav")
-						local backgroundMusicPlaying = audio.play( backgroundMusic, { loops = -1, fadein = 1000 } )
-
+						local backgroundMusicPlaying =
+                audio.play( backgroundMusic, { loops = -1, fadein = 1000 } )
 							for key, object in pairs( objectTable ) do
 								object.group:addEventListener( "touch", objectTouched )
 							end
@@ -388,7 +383,7 @@ function scene:endTutorial()
 					}
 				)
 			end
-		} 
+		}
 	)
 
 end

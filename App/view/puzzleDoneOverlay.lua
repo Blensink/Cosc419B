@@ -16,7 +16,6 @@ local status
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
-
 -- local forward references should go here
 
 ---------------------------------------------------------------------------------
@@ -38,19 +37,20 @@ function scene:create( event )
 	-- Initialize the scene here.
 	-- Example: add display objects to "sceneGroup", add touch listeners, etc.
 	-----------------------------------------------------------------------------
-
-	local background = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight )
+	local background = display.newRect( display.contentCenterX, display.contentCenterY,
+    display.contentWidth, display.contentHeight )
 	background:setFillColor( { 0, 0, 0} )
 	background.alpha = 0.3
 
-	local backgroundRect = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth - 50, display.contentHeight/3 )
+	local backgroundRect = display.newRect( display.contentCenterX, display.contentCenterY,
+    display.contentWidth - 50, display.contentHeight/3 )
 	background:setFillColor( { 1, 1, 1 } )
 
 	overlayGroup:insert( background )
 	overlayGroup:insert( backgroundRect )
 
 	local gameText
-	-- We're going to display a different message/behaviour based on whther
+	-- We're going to display a different message/behaviour based on whether
 	-- 0 = false, 1 = true, 2 = not done.
 	if status == 0 then
 		gameText = display.newImageRect( "img/gameOver.png", 200, 100 )
@@ -71,29 +71,25 @@ function scene:create( event )
 			-- Add points based on how well they did.
 			-- For now, dummy.
 			local pointsEarned = params.amount
-			print( "earned", pointsEarned)
 			session:addPoints( pointsEarned )
 			session.saveInfo()
-
 			gameText = display.newImageRect( "img/correct.png", 200, 100 )
 			gameText.x = backgroundRect.x
 			gameText.y = backgroundRect.y - backgroundRect.height/2 + gameText.height/2 + 10
-		
-			local pointsTextOptions = 
+
+			local pointsTextOptions =
 			{
-			    --parent = textGroup,
 			    text = "You earned " .. pointsEarned .. " points!",
 			    x = display.contentCenterX,
 			    y = display.contentCenterY + 25,
 			    width = display.contentWidth - 50,
-			    font = native.systemFontBold,   
+			    font = native.systemFontBold,
 			    fontSize = 24,
-			    align = "center"  --new alignment parameter
-			}		
+			    align = "center"
+			}
 			local pointsText = display.newText( pointsTextOptions )
 			pointsText:setFillColor( 0, 0, 0 )
 			overlayGroup:insert( pointsText )
-
 		else
 			gameText = display.newImageRect( "img/correct.png", 200, 100 )
 			gameText.x = backgroundRect.x
@@ -136,7 +132,6 @@ function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
 	local parent = event.parent
-
 	---------------------------------------
 	-- BEFORE the scene has moved onscreen.
 	---------------------------------------
@@ -144,12 +139,10 @@ function scene:show( event )
 		------------------------------------------------------------------------------
 		-- Called when the scene is still off screen (but is about to come on screen).
 		------------------------------------------------------------------------------
-
 	--------------------------------------------------
 	-- Immediately after the scene has moved onscreen.
 	--------------------------------------------------
 	elseif ( phase == "did" ) then
-
 		-----------------------------------------------------------------------------
 		-- Called when the scene is now on screen.
 		-- Insert code here to make the scene come alive.
@@ -191,24 +184,19 @@ end
 function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	----------------------------------------------
 	-- When the screen is about to move offscreen.
 	----------------------------------------------
 	if ( phase == "will" ) then
-
 		rightButtonGroup:removeEventListener( "touch", rightPressed )
 		leftButtonGroup:removeEventListener( "touch", leftPressed )
-
 	------------------------------------------------
 	-- When the scene has finished moving offscreen.
 	------------------------------------------------
 	elseif ( phase == "did" ) then
-
 		-----------------------------------------------------------------------------
 		-- Called immediately after scene goes off screen.
 		-----------------------------------------------------------------------------
-
 	end
 end
 

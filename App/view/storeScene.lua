@@ -9,6 +9,7 @@ local settings = require( "model.settingsModel" )
 local session = require( "model.sessionModel" )
 local analytics = require( "model.analyticsModel" )
 local item = require( "element.storeItem" )
+local strings = require( "constants.strings" )
 
 local backButton
 local backButtonGroup
@@ -19,7 +20,6 @@ local storeItemTable = {}
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
-
 -- local forward references should go here
 
 ---------------------------------------------------------------------------------
@@ -47,20 +47,18 @@ function scene:create( event )
 	sceneGroup:insert( background )
 
 	-- Get the current number of points.
-	print( "[Store Scene] Getting user info ")
 	session.getInfo()
 	local currentPoints = session.getPoints()
 
 	local pointsTextOptions =
 	{
-	    --parent = textGroup,
-	    text = "You've earned " .. currentPoints .. " points! \n Spend them here on cool stuff.",
+	    text =  strings.pointsEarned1 .. currentPoints .. strings.pointsEarned2,
 	    x = display.contentCenterX,
 	    y = 150,
 	    width = display.contentWidth - 50,
 	    font = native.systemFontBold,
 	    fontSize = 22,
-	    align = "center"  --new alignment parameter
+	    align = "center"
 	}
 	local pointsText = display.newText( pointsTextOptions )
 	pointsText:setFillColor( 0, 0, 0 )
@@ -82,7 +80,7 @@ function scene:create( event )
 			imgName = "img/timeExtender.png",
 			cost = 100,
 			name = "Time Extender",
-			description = "Adds 10 seconds to each puzzle, for the deliberate gamer.",
+			description = strings.timeExtenderDescription,
 			type = "timeExtender",
 			group = display.newGroup()
 		} )
@@ -96,7 +94,7 @@ function scene:create( event )
 			imgName = "img/boost.png",
 			cost = 500,
 			name = "Point Booster",
-			description = "+10% points on all completed custom levels.",
+			description = strings.pointBoosterDescription,
 			type = "booster",
 			group = display.newGroup()
 		} )
@@ -110,7 +108,7 @@ function scene:create( event )
 			imgName = "img/leader.png",
 			cost = 10,
 			name = "Leaderboard Points",
-			description = "Leaders get to make new custom games. And win. At life.",
+			description = strings.leaderboardDescription,
 			type = "points",
 			group = display.newGroup()
 		} )
@@ -124,7 +122,7 @@ function scene:create( event )
 			imgName = "img/musicPack.png",
 			cost = 100,
 			name = "Alternate music pack #2.",
-			description = "Changes the music to match the epicness of your performance.",
+			description = strings.altMusic2Description,
 			type = "musicPack",
 			group = display.newGroup()
 		} )
@@ -138,7 +136,7 @@ function scene:create( event )
 			imgName = "img/cats.png",
 			cost = 10000,
 			name = "Cats",
-			description = "Everything is cats. Yes, everything.",
+			description = strings.catsDescription,
 			type = "theme",
 			group = display.newGroup()
 		} )
@@ -152,7 +150,7 @@ function scene:create( event )
 			imgName = "img/noMusic.png",
 			cost = 1000000,
 			name = "No Music",
-			description = "Turn off that infernal racket. For those who hate fun.",
+			description = this.noMusicDescription,
 			type = "musicPack",
 			group = display.newGroup()
 		} )
@@ -167,12 +165,10 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	---------------------------------------
 	-- BEFORE the scene has moved onscreen.
 	---------------------------------------
 	if ( phase == "will" ) then
-
 		function backPressed( event )
 			local phase = event.phase
 
@@ -224,12 +220,10 @@ end
 function scene:hide( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	----------------------------------------------
 	-- When the screen is about to move offscreen.
 	----------------------------------------------
 	if ( phase == "will" ) then
-
 	------------------------------------------------
 	-- When the scene has finished moving offscreen.
 	------------------------------------------------
@@ -242,13 +236,11 @@ end
 -- @tparam event event Event fired by the composer API.
 function scene:destroy( event )
 	local sceneGroup = self.view
-
 	-----------------------------------------------------------------------------
 	-- Called prior to the removal of scene's view ("sceneGroup").
 	-- Insert code here to clean up the scene.
 	-- Example: remove display objects, save state, etc.
 	-----------------------------------------------------------------------------
-
 end
 
 --- Custom functions.
