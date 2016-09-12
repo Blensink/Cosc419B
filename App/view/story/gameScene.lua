@@ -29,7 +29,6 @@ local objectOriginY = display.contentHeight/4
 -- All code outside of the listener functions will only be executed ONCE
 -- unless "composer.removeScene()" is called.
 ---------------------------------------------------------------------------------
-
 -- local forward references should go here
 
 ---------------------------------------------------------------------------------
@@ -44,7 +43,6 @@ local objectOriginY = display.contentHeight/4
 -- @tparam event event Event fired by the composer API.
 function scene:create( event )
 	local sceneGroup = self.view
-
 	-----------------------------------------------------------------------------
 	-- Initialize the scene here.
 	-- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -56,16 +54,15 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
-
 	---------------------------------------
 	-- BEFORE the scene has moved onscreen.
 	---------------------------------------
 	if ( phase == "will" ) then
-
 		startTime = os.time()
 		analytics.init()
 
-		local backgroundImage = display.newImageRect( "img/questionBackground.png", display.contentHeight, display.contentHeight )
+		local backgroundImage = display.newImageRect( "img/questionBackground.png",
+      display.contentHeight, display.contentHeight )
 		backgroundImage.x = display.contentCenterX
 		backgroundImage.y = display.contentCenterY
 		backgroundImage.alpha = 0.2
@@ -89,7 +86,7 @@ function scene:show( event )
 		sceneGroup:insert( doneButton )
 
 		gameTimer = gameTime:new
-		{ 
+		{
 			timerGroup = display.newGroup(),
 			maxTime = 30,
 			width = 30,
@@ -99,16 +96,16 @@ function scene:show( event )
 		}
 		sceneGroup:insert( gameTimer.timerGroup )
 
-		gameTimer.start( function() 
-					local puzzleDoneOptions = 
+		gameTimer.start( function()
+					local puzzleDoneOptions =
 					{
-						params = 
+						params =
 						{
 							status = 0
 						}
 					}
 					composer.showOverlay( "view.puzzleDoneOverlay", puzzleDoneOptions )
-			end 
+			end
 		)
 
 		-- Get our current level from the session model, then get that level from the level file.
@@ -123,7 +120,8 @@ function scene:show( event )
 			local xModifier = (key-1)%4
 			local yModifier = math.floor( (key-1)/4 )
 
-			local newObject = object:new( { imgName = "img/"..objectImage..".png", width = 50, height = 50, answer = puzzleAnswer, group = display.newGroup() } )
+			local newObject = object:new( { imgName = "img/"..objectImage..".png",
+        width = 50, height = 50, answer = puzzleAnswer, group = display.newGroup() } )
 			newObject.group.x = objectOriginX + 60*xModifier
 			newObject.group.y = objectOriginY + 60*yModifier
 
@@ -158,7 +156,7 @@ function scene:show( event )
 					if not( event.target == group ) then
 						object.group:removeEventListener( "touch", objectTouched )
 					end
-				end		
+				end
 			elseif phase == "moved" then
 				target.x = event.x
 				target.y = event.y
@@ -170,7 +168,7 @@ function scene:show( event )
 					if not( event.target == group ) then
 						object.group:addEventListener( "touch", objectTouched )
 					end
-				end		
+				end
 			end
 		end
 
@@ -231,9 +229,9 @@ function scene:show( event )
 				local level = sessionModel.level()
 				analytics:puzzleFinished( level, startTime, endTime )
 
-				local puzzleDoneOptions = 
+				local puzzleDoneOptions =
 				{
-					params = 
+					params =
 					{
 						status = puzzleCorrect
 					}
