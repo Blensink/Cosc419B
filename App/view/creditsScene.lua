@@ -41,18 +41,17 @@ function scene:create( event )
 	-----------------------------------------------------------------------------
 	local creditsTextOptions =
 	{
-	    --parent = textGroup,
-	    text = "Game Design: Brendan Lensink \n
-      	Art: Brendan Lensink \n
-        Sound Design: Brendan Lensink \n
-        Puzzle Design: Brendan Lensink \n
-        Sound Effects: Jessica Weeres",
+	    text = "Game Design: Brendan Lensink \n"..
+      	"Art: Brendan Lensink \n"..
+        "Sound Design: Brendan Lensink \n"..
+        "Puzzle Design: Brendan Lensink \n"..
+        "Sound Effects: Jessica Weeres",
 	    x = display.contentCenterX,
 	    y = display.contentCenterY,
 	    width = display.contentWidth - 50,
 	    font = native.systemFontBold,
 	    fontSize = 18,
-	    align = "center"  --new alignment parameter
+	    align = "center"
 	}
 
 	local creditsText = display.newText( creditsTextOptions )

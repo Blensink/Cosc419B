@@ -1,3 +1,6 @@
+--- Session Model
+-- Model to keep track of user sessions.
+-- @module model
 sessionModel = {}
 
 local json = require( "json" )
@@ -8,84 +11,75 @@ local lfs = require( "lfs" )
 local userInfo = {}
 local seenDisclaimer = false
 
+--- Save a user's info to the file system.
 function sessionModel:saveInfo()
 	--userInfo["seenDisclaimer"] = seenDisclaimer
 	userInfo["userId"] = system.getInfo( "deviceID" )
 	local output = json.encode( userInfo )
 
-	-- Path for the file to write
 	local path = system.pathForFile( "userInfo.txt", system.DocumentsDirectory )
-
-	-- Open the file handle
 	local file, errorString = io.open( path, "w" )
 
 	if not file then
-	    -- Error occurred; output the cause
-	    print( "File error: " .. errorString )
+	  print( "File error: " .. errorString )
 	else
-	    -- Write data to file
-	    file:write( output )
-	    print( "[SessionModel] Writing out user info:", output )
-
-	    -- Close the file handle
-	    io.close( file )
+	  file:write( output )
+	  io.close( file )
 	end
 
 	file = nil
 end
 
+--- Read the session info stored locally.
 function sessionModel:getInfo()
-	-- Path for the file to read
 	local path = system.pathForFile( "userInfo.txt", system.DocumentsDirectory )
 
-	-- Open the file handle
 	local file, errorString = io.open( path, "r" )
 
 	if not file then
-	    -- Error occurred; output the cause
-	    print( "File error: " .. errorString )
+	  print( "File error: " .. errorString )
 	else
-	    -- Read data from file
-	    local contents = file:read( "*a" )
-
-	    -- Output the file contents
-	    print( " \t User info contents: ")
-	    userInfo = json.decode( contents )
-	    for k,v in pairs(userInfo) do
-	    	print("\t\t",k,v)
-	    end
-	    print("\n")
-	    	    -- Close the file handle
-	    io.close( file )
+	  local contents = file:read( "*a" )
+	  userInfo = json.decode( contents )
+	  io.close( file )
 	end
 
 	file = nil
 end
 
+--- Get the device id stored locally.
+-- @return The device id.
 function sessionModel:getId()
 	return system.getInfo( "deviceID" )
 end
 
+--- Log that the user has seen the disclaimer.
 function sessionModel:seenDisclaimer()
 	userInfo["seenDisclaimer"] = true
 --	seenDisclaimer = true
 end
 
+--- Check if the user has seen the disclaimer.
+-- @return true if they have, false if not.
 function sessionModel:hasSeenDisclaimer()
 	return userInfo["seenDisclaimer"]--seenDisclaimer
 end
 
+--- Set the current level for a user.
+-- @param level The level to set.
 function sessionModel:setLevel( level )
 	userInfo["currentLevel"] = level
-
 	-- Why doesnt this work..
 	--self.saveInfo()
 end
 
+--- Advance a user's current level.
 function sessionModel:nextLevel()
 	userInfo["currentLevel"] = userInfo["currentLevel"] + 1
 end
 
+--- Get the user's current level.
+-- @return The current level.
 function sessionModel:level()
 	if userInfo['currentLevel'] == nil then
 		return 0
@@ -94,6 +88,8 @@ function sessionModel:level()
 	end
 end
 
+--- Get the user's current level.
+-- @return The current level.
 function sessionModel:getCurrentLevel()
 	if userInfo["currentLevel"] == nil then
 		userInfo["currentLevel"] = 0
@@ -102,62 +98,40 @@ function sessionModel:getCurrentLevel()
 	end
 
 	local currentLevel = userInfo["currentLevel"]
-
-	-- First get the JSON holding all the levels.
-		-- Path for the file to read
 	local path = system.pathForFile( "levels.txt", system.ResourceDirectory )
-
-	-- Open the file handle
 	local file, errorString = io.open( path, "r" )
 
 	if not file then
-	    -- Error occurred; output the cause
-	    print( "File error: " .. errorString )
+	  print( "File error: " .. errorString )
 	else
-	    -- Read data from file
-	    local contents = file:read( "*a" )
-
-	    levelInfo = json.decode( contents )
-
-	    -- Close the file handle
-	    io.close( file )
-
-	    return levelInfo[tostring(currentLevel)]
+	  local contents = file:read( "*a" )
+	  levelInfo = json.decode( contents )
+	  io.close( file )
+	  return levelInfo[tostring(currentLevel)]
 	end
 
 	file = nil
 end
 
+--- Get a level's data.
+-- @param levelName The name for the level we're looking for.
 function sessionModel:getLevel( levelName )
-	print( "[SessionModel] Getting level: ", levelName)
-	-- First get the JSON holding all the levels.
-		-- Path for the file to read
 	local path = system.pathForFile( "levels.txt", system.ResourceDirectory )
-
-	-- Open the file handle
 	local file, errorString = io.open( path, "r" )
 
 	if not file then
-	    -- Error occurred; output the cause
-	    print( "File error: " .. errorString )
+	  print( "File error: " .. errorString )
 	else
-	    -- Read data from file
-	    local contents = file:read( "*a" )
-	    local levelInfo = json.decode( contents )
-
-	    -- Close the file handle
-	    io.close( file )
-	    print( "[SessionModel] Level info:" )
-	    for k,v in pairs(levelInfo) do
-	    	print("\t",k,v)
-	    end
-	    print("\n")
-	    return levelInfo[levelName]
+	  local contents = file:read( "*a" )
+	  local levelInfo = json.decode( contents )
+	  io.close( file )
+	  return levelInfo[levelName]
 	end
 
 	file = nil
 end
 
+--- Make a level json and store it on the device.
 function sessionModel:makeLevelJSON()
 	local levelTable = {}
 
@@ -171,85 +145,70 @@ function sessionModel:makeLevelJSON()
 	table.insert( levelTable["1"], {"cat", 1 } )
 	table.insert( levelTable["1"], { "dog", 2 } )
 
-	-- Path for the file to write
 	local path = system.pathForFile( "levels.txt", system.ResourceDirectory )
-
-	-- Open the file handle
 	local file, errorString = io.open( path, "w" )
 
 	if not file then
-	    -- Error occurred; output the cause
-	    print( "File error: " .. errorString )
+	  print( "File error: " .. errorString )
 	else
-	    -- Write data to file
-	    file:write( json.encode(levelTable) )
-
-	    -- Close the file handle
-	    io.close( file )
+	  file:write( json.encode(levelTable) )
+	  io.close( file )
 	end
-
 	file = nil
 end
 
+--- Log the tutorial as complete.
 function sessionModel:setTutorialComplete()
 	userInfo["tutorialComplete"] = true
-
 	self.saveInfo()
 end
 
+--- Check if the tutorial is complete.
+-- @return True if complete, false if not.
 function sessionModel:tutorialComplete()
 	return userInfo["tutorialComplete"]
 end
 
+--- Log the story as completed.
 function sessionModel:setStoryDone()
 	userInfo["storyDone"] = true
-
 	self.saveInfo()
 end
 
+--- Check if the story is done.
+-- @return True if it's been completed, false if not.
 function sessionModel:checkIfStoryDone()
 	if userInfo["storyDone"] then
 		return true
-	else 
+	else
 		return false
 	end
 end
 
---------------------------------------------------------------------------------
---                                                                            --
--- Custom Game Stuff.                                                         --
---                                                                            --
---------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+-- Custom Game Stuff.
+----------------------------------------------------------------------------------------------------
 
+--- Get the icon pack.
 function sessionModel:getIconPack()
-	print( "[SessionModel] Getting Icon Pack" )
-
 	local path = system.pathForFile( "icons.txt", system.ResourceDirectory )
-
-	-- Open the file handle
 	local file, errorString = io.open( path, "r" )
 
 	if not file then
-	    -- Error occurred; output the cause
-	    print( "File error: " .. errorString )
+		print( "File error: " .. errorString )
 	else
-	    -- Read data from file
-	    local contents = file:read( "*a" )
-	    local iconPack = json.decode( contents )
-
-	    -- Close the file handle
-	    io.close( file )
-
+	  local contents = file:read( "*a" )
+	  local iconPack = json.decode( contents )
+	  io.close( file )
 		return iconPack
 	end
 
 	file = nil
 end
 
+--- Write a custom game out to the device.
+-- @param puzzleTable The icons and answers for the puzzle.
 function sessionModel:writeLevel( puzzleTable )
-	print( "[SessionModel] Writing out custom level" )
-
-	-- Check if there's already a custom game folder, if not make it.
 	local folderPath = system.pathForFile( "", system.DocumentsDirectory )
 	lfs.chdir( folderPath )
 	if not lfs.chdir( "games/" ) then
@@ -257,65 +216,50 @@ function sessionModel:writeLevel( puzzleTable )
 		lfs.chdir( "games/" )
 	end
 
-	print( "Writing out twice for something")
-	-- Path for the file to write
-	local path = system.pathForFile( "games/" .. tostring(math.random( 0, 10000000 )) .. ".txt", system.DocumentsDirectory )
-
-	-- Open the file handle
+	local path = system.pathForFile( "games/" .. tostring(math.random( 0, 10000000 )) ..
+		".txt", system.DocumentsDirectory )
 	local file, errorString = io.open( path, "w" )
 
 	if not file then
-	    -- Error occurred; output the cause
-	    print( "File error: " .. errorString )
+	  print( "File error: " .. errorString )
 	else
-	    -- Write data to file
-	    print( json.encode(puzzleTable))
-	    file:write( json.encode( puzzleTable ) )
-
-	    -- Close the file handle
-	    io.close( file )
+	  file:write( json.encode( puzzleTable ) )
+	  io.close( file )
 	end
 
 	file = nil
 end
 
+--- Retrieve a random custom level.
+-- @return The level info.
 function sessionModel:getRandomCustomLevel()
-	print( "[SessionModel] Getting a random custom level." )
-
 	local fileTable = {}
 
 	local path = system.pathForFile( "games/", system.DocumentsDirectory )
 	for file in lfs.dir(path) do
-   		-- Hacky way to make sure the file is a .txt and therefore a game.
-   		if ( string.sub( file, string.len(file)-3, string.len(file) ) == ".txt" ) then
-   			table.insert( fileTable, file )
-   		end
+  	if ( string.sub( file, string.len(file)-3, string.len(file) ) == ".txt" ) then
+  		table.insert( fileTable, file )
+  	end
 	end
 
 	index = math.random( 1, #fileTable )
 	local newLevel = system.pathForFile( "games/"..fileTable[index], system.DocumentsDirectory )
-
-	-- Open the file handle
 	local file, errorString = io.open( newLevel, "r" )
 
 	if not file then
-	    -- Error occurred; output the cause
-	    print( "File error: " .. errorString )
+	  print( "File error: " .. errorString )
 	else
-	    -- Read data from file
-	    local contents = file:read( "*a" )
-
-	    levelInfo = json.decode( contents )
-
-	    -- Close the file handle
-	    io.close( file )
-
-	    return levelInfo
+		local contents = file:read( "*a" )
+	  levelInfo = json.decode( contents )
+	  io.close( file )
+	  return levelInfo
 	end
 
 	file = nil
 end
 
+--- Get a user's points.
+-- @return The user's points.
 function sessionModel:getPoints()
 	if userInfo["points"] == nil then
 		return 0
@@ -324,8 +268,9 @@ function sessionModel:getPoints()
 	end
 end
 
+--- Add points for a user.
+-- @param amount The amount of points to add.
 function sessionModel:addPoints( amount )
-	print( "[SESSION MODEL]: ADDIGN POINTS")
 	if userInfo["points"] == nil then
 		userInfo["points"] = amount
 	else
@@ -333,6 +278,8 @@ function sessionModel:addPoints( amount )
 	end
 end
 
+--- Subtract points from a user.
+-- @return True if the points were removed successfully, false if not.
 function sessionModel:subtractPoints( amount )
 	local points = tonumber( userInfo["points"] )
 
@@ -342,17 +289,17 @@ function sessionModel:subtractPoints( amount )
 		return false
 	else
 		userInfo["points"] = userInfo["points"] - amount
-
 		return true
 	end
 end
 
---------------------------------------------------------------------------------
---                                                                            --
--- Store Related Session Tracking.                                            --
---                                                                            --
---------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+-- Store Related Session Tracking.
+----------------------------------------------------------------------------------------------------
 
+--- Check if a user has bought an item yet.
+-- @param itemName The item we're checking.
+-- @return True if they've bought it already, false if not.
 function sessionModel:checkIfBought( itemName )
 	if userInfo[itemName] == nil or userInfo[itemName] == false then
 		return false
@@ -363,6 +310,8 @@ function sessionModel:checkIfBought( itemName )
 	end
 end
 
+--- Log an item as bought.
+-- @param itemName The item bought.
 function sessionModel:setItemBought( itemName )
 	if itemName == "Leaderboard Points" then
 		if userInfo[itemName] == nil then
@@ -375,14 +324,21 @@ function sessionModel:setItemBought( itemName )
 	end
 end
 
+--- Set an item as active.
+-- @param Type The type of item to set.
+-- @param name The name of the item.
 function sessionModel:setActiveItem( type, name )
 	userInfo[type] = name
 end
 
+--- Get the audio track that's current set.
+-- @param The name of the audio track currently set.
 function sessionModel:getAudioTrack()
 	return userInfo[musicPack]
 end
 
+--- Get the user's current leaderboard spot.
+--- @return The current percentile
 function sessionModel:getLeaderboardPlace()
 	return math.random(0,100)
 end

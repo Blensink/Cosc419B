@@ -1,5 +1,5 @@
---- A scene template.
--- Use the @scene tag for actual scenes.
+--- The main game scene.
+-- @scene gameScene
 -- @module scene
 
 local composer = require( "composer" )
@@ -97,20 +97,12 @@ function scene:show( event )
 		sceneGroup:insert( gameTimer.timerGroup )
 
 		gameTimer.start( function()
-					local puzzleDoneOptions =
-					{
-						params =
-						{
-							status = 0
-						}
-					}
-					composer.showOverlay( "view.puzzleDoneOverlay", puzzleDoneOptions )
-			end
-		)
+			local puzzleDoneOptions = { params = { status = 0 } }
+			composer.showOverlay( "view.puzzleDoneOverlay", puzzleDoneOptions )
+		end)
 
 		-- Get our current level from the session model, then get that level from the level file.
 		local levelInfo = sessionModel.getCurrentLevel()
-		print( "[GameScene] Loading level: ", sessionModel.level() )
 
 		-- Now that we know what our level is going to look like make the objects for it.
 		for key, puzzleObject in pairs(levelInfo) do
@@ -134,7 +126,6 @@ function scene:show( event )
 
 		if not sessionModel:tutorialComplete() and currentLevel == 0 then
 			gameTimer.pause()
-
 			composer.showOverlay( "view.tutorialNotDoneOverlay" )
 		end
 
