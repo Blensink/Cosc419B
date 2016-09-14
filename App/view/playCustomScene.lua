@@ -96,7 +96,7 @@ function scene:show( event )
 
 		-- Get our current level from the session model, then get that level from the level file.
 		local levelInfo = session.getRandomCustomLevel()
-
+print(levelInfo)
 		-- Now that we know what our level is going to look like make the objects for it.
 		for key, puzzleObject in pairs(levelInfo) do
 			local objectImage = puzzleObject[1]

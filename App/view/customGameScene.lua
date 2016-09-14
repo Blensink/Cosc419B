@@ -57,41 +57,44 @@ function scene:create( event )
 	backButtonGroup:insert( backButton )
 	sceneGroup:insert( backButtonGroup )
 
-	playButton = display.newImageRect( "img/playCustom.png", 100, 50 )
-	playButton:setFillColor( unpack( settings.getButtonOffColor() ) )
-	playButton.x = display.contentCenterX
-	playButton.y = display.contentHeight/3 + 100
+	playButtonGroup = display.newGroup()
+	print(session.getCustomLevelCount())
+	if(session.getCustomLevelCount() > 0) then
+		playButton = display.newImageRect( "img/playCustom.png", 100, 50 )
+		playButton:setFillColor( unpack( settings.getButtonOffColor() ) )
+		playButton.x = display.contentCenterX
+		playButton.y = display.contentHeight/3 + 100
 
-	local leaderSpot = session.getLeaderboardPlace()
-	local leaderTextOptions =
-	{
-		text = strings.customGameLeaderBoard1 .. leaderSpot .. strings.customGameLeaderBoard2,
-		x = display.contentCenterX,
-		y = display.contentHeight/3,
-		width = display.contentWidth - 50,
-		fontSize = 20,
-		align = "center"
-	}
-	local leaderText = display.newText( leaderTextOptions )
-	leaderText:setFillColor( 0, 0, 0 )
-	sceneGroup:insert( leaderText )
+		-- if leaderSpot <= 50 then
+		-- 	createButton.alpha = 0
+		-- end
 
-	createButton = display.newImageRect( "img/create.png", 100, 50 )
-	createButton:setFillColor( unpack( settings.getButtonOffColor() ) )
-	createButton.x = display.contentCenterX
-	createButton.y = display.contentHeight*3/4
-
-	createButtonGroup = display.newGroup()
-	createButtonGroup:insert( createButton )
-	sceneGroup:insert( createButtonGroup )
-
-	if leaderSpot <= 50 then
-		createButton.alpha = 0
+		playButtonGroup:insert( playButton )
+		sceneGroup:insert( playButtonGroup )
 	end
 
-	playButtonGroup = display.newGroup()
-	playButtonGroup:insert( playButton )
-	sceneGroup:insert( playButtonGroup )
+		local leaderSpot = session.getLeaderboardPlace()
+		local leaderTextOptions =
+		{
+			text = strings.customGameLeaderBoard1 .. leaderSpot .. strings.customGameLeaderBoard2,
+			x = display.contentCenterX,
+			y = display.contentHeight/3,
+			width = display.contentWidth - 50,
+			fontSize = 20,
+			align = "center"
+		}
+		local leaderText = display.newText( leaderTextOptions )
+		leaderText:setFillColor( 0, 0, 0 )
+		sceneGroup:insert( leaderText )
+
+		createButton = display.newImageRect( "img/create.png", 100, 50 )
+		createButton:setFillColor( unpack( settings.getButtonOffColor() ) )
+		createButton.x = display.contentCenterX
+		createButton.y = display.contentHeight*3/4
+
+		createButtonGroup = display.newGroup()
+		createButtonGroup:insert( createButton )
+		sceneGroup:insert( createButtonGroup )
 end
 
 --- Called twice, once BEFORE, and once immediately after scene has moved onscreen.
@@ -130,20 +133,23 @@ function scene:show( event )
 			end
 		end
 
-		function playPressed( event )
-			local phase = event.phase
+		if(session.getCustomLevelCount() > 0) then
+			function playPressed( event )
+				local phase = event.phase
 
-			if phase == "began" then
-				backButton:setFillColor( unpack( settings.getButtonOnColor() ) )
-			elseif phase == "ended" then
-				backButton:setFillColor( unpack( settings.getButtonOffColor() ) )
-				composer.gotoScene("view.playCustomScene")
+				if phase == "began" then
+					backButton:setFillColor( unpack( settings.getButtonOnColor() ) )
+				elseif phase == "ended" then
+					backButton:setFillColor( unpack( settings.getButtonOffColor() ) )
+					composer.gotoScene("view.playCustomScene")
+				end
 			end
+			playButtonGroup:addEventListener( "touch", playPressed )
 		end
 
 		backButtonGroup:addEventListener( "touch", backPressed )
 		createButtonGroup:addEventListener( "touch", createPressed )
-		playButtonGroup:addEventListener( "touch", playPressed )
+
 	end
 end
 
@@ -158,7 +164,9 @@ function scene:hide( event )
 	if ( phase == "will" ) then
 		backButtonGroup:removeEventListener( "touch", backPressed )
 		createButtonGroup:removeEventListener( "touch", createPressed )
-		playButtonGroup:removeEventListener( "touch", playPressed )
+		if(session.getCustomLevelCount() > 0) then
+			playButtonGroup:removeEventListener( "touch", playPressed )
+		end
 	------------------------------------------------
 	-- When the scene has finished moving offscreen.
 	------------------------------------------------

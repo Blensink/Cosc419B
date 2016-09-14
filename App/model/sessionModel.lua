@@ -242,20 +242,37 @@ function sessionModel:getRandomCustomLevel()
   	end
 	end
 
-	index = math.random( 1, #fileTable )
-	local newLevel = system.pathForFile( "games/"..fileTable[index], system.DocumentsDirectory )
-	local file, errorString = io.open( newLevel, "r" )
+	if #fileTable >= 1 then
+		index = math.random( 1, #fileTable )
+		local newLevel = system.pathForFile( "games/"..fileTable[index], system.DocumentsDirectory )
+		local file, errorString = io.open( newLevel, "r" )
 
-	if not file then
-	  print( "File error: " .. errorString )
-	else
-		local contents = file:read( "*a" )
-	  levelInfo = json.decode( contents )
-	  io.close( file )
-	  return levelInfo
+		if not file then
+		  print( "File error: " .. errorString )
+		else
+			local contents = file:read( "*a" )
+		  levelInfo = json.decode( contents )
+		  io.close( file )
+		  return levelInfo
+		end
 	end
 
 	file = nil
+end
+
+--- Get a count of custom levels stored.
+-- @return The count of levels
+function sessionModel:getCustomLevelCount()
+	local fileTable = {}
+
+	local path = system.pathForFile( "games/", system.DocumentsDirectory )
+	for file in lfs.dir(path) do
+  	if ( string.sub( file, string.len(file)-3, string.len(file) ) == ".txt" ) then
+  		table.insert( fileTable, file )
+  	end
+	end
+
+	return #fileTable
 end
 
 --- Get a user's points.
